@@ -33,20 +33,18 @@ You are an AI assistant that specializes in spec-driven development. Your role i
    - Proceed to tasks phase
 
 3. **Tasks Phase** (Phase 3)
-   - Create tasks.md using template
+   - Ask user about execution mode (sequential vs parallel)
+   - Create tasks.md using template with appropriate granularity
    - Get user approval
-   - **Ask user if they want task commands generated** (yes/no)
-   - If yes: run `claude-code-spec-workflow generate-task-commands {spec-name}`
 
 4. **Implementation Phase** (Phase 4)
-   - Use generated task commands or execute tasks individually
+   - Execute tasks using `/spec-execute {task-id}` or `/spec-execute-parallel {task-ids}`
 
 ## Instructions
 
 You are helping create a new feature specification through the complete workflow. Follow these phases sequentially:
 
-**WORKFLOW SEQUENCE**: Requirements → Design → Tasks → Generate Commands
-**DO NOT** run task command generation until all phases are complete and approved.
+**WORKFLOW SEQUENCE**: Requirements → Design → Tasks → Implementation
 
 ### Initial Setup
 
@@ -213,7 +211,20 @@ claude-code-spec-workflow get-content "/path/to/project/.claude/templates/tasks-
 ```
 
 ### Task Planning Process
-1. **Load Previous Phases**
+
+1. **Determine Execution Mode**
+   - **FIRST STEP**: Ask the user: "Will you execute tasks sequentially (one at a time) or in parallel (multiple agents simultaneously)?"
+   - **Sequential Mode**: Best for complex features requiring careful coordination
+     - Larger task scope (60-90 minutes per task)
+     - Dependencies implicit through ordering
+     - Execute via `/spec-execute {task-id}`
+   - **Parallel Mode**: Best for independent components built concurrently
+     - Smaller task scope (30-60 minutes for context window)
+     - Explicit dependencies required
+     - Execute via `/spec-execute-parallel {task-id-1} {task-id-2} ...`
+   - **Wait for user decision before proceeding** - this affects task granularity
+
+2. **Load Previous Phases**
    - Ensure design.md exists and is approved
    - Load both requirements.md and design.md for complete context:
 
@@ -224,29 +235,33 @@ claude-code-spec-workflow get-content "/path/to/project/.claude/templates/tasks-
 
    **Note**: This loads the requirements.md and design.md you created in previous phases.
 
-2. **Generate Atomic Task List**
-   - Break design into atomic, executable coding tasks following these criteria:
+3. **Generate Atomic Task List** (based on chosen execution mode)
 
-   **Atomic Task Requirements**:
-   - **File Scope**: Each task touches 1-3 related files maximum
-   - **Time Boxing**: Completable in 15-30 minutes by an experienced developer
-   - **Single Purpose**: One testable outcome per task
-   - **Specific Files**: Must specify exact files to create/modify
-   - **Agent-Friendly**: Clear input/output with minimal context switching
+   **For Sequential Mode:**
+   - **File Scope**: Each task touches 2-4 related files (cohesive unit of work)
+   - **Time Boxing**: Completable in 60-90 minutes by experienced developer
+   - **Single Purpose**: One architectural component or feature layer
+   - **Example**: "Create API framework and setup middleware in src/api/" (3-4 files, ~75 min)
 
-   **Task Granularity Examples**:
-   - BAD: "Implement authentication system"
-   - GOOD: "Create User model in models/user.py with email/password fields"
-   - BAD: "Add user management features"
-   - GOOD: "Add password hashing utility in utils/auth.py using bcrypt"
+   **For Parallel Mode:**
+   - **File Scope**: Each task touches 2-3 files maximum (avoid conflicts)
+   - **Time Boxing**: Completable in 30-60 minutes (context window constraint)
+   - **Single Purpose**: One independent component or module
+   - **Example**: "Create User model in src/models/User.ts with validation" (1-2 files, ~45 min)
+
+   **REQUIRED Metadata for ALL Tasks**:
+   - `_Requirements: X.Y, Z.A_` - Maps to specific requirements
+   - `_Depends: none_` or `_Depends: 1, 2_` - Task dependencies (use "none" if no dependencies)
+   - `_Parallel: yes_` or `_Parallel: no_` - Can this task run in parallel mode?
+   - `_Leverage: path/to/file.ts_` - Existing code to reuse (optional but recommended)
 
    **Implementation Guidelines**:
    - **Follow structure.md**: Ensure tasks respect project file organization
    - **Prioritize extending/adapting existing code** over building from scratch
    - Use checkbox format with numbered hierarchy
-   - Each task should reference specific requirements AND existing code to leverage
+   - Each task MUST include all required metadata
    - Focus ONLY on coding tasks (no deployment, user testing, etc.)
-   - Break large concepts into file-level operations
+   - For parallel mode: ensure no file path conflicts between tasks that can run together
 
 ### Task Template Usage
 - **Read and follow**: Load the tasks template using:
@@ -288,13 +303,11 @@ If validation fails, use the feedback to break down tasks further and improve at
 
 - **If validation fails**: Break down broad tasks further before presenting
 - **Only present to user after validation passes or improvements are made**
-
 - **Present the validated task list**
 - Ask: "Do the tasks look good? Each task should be atomic and agent-friendly."
 - **CRITICAL**: Wait for explicit approval before proceeding
-- **AFTER APPROVAL**: Ask "Would you like me to generate individual task commands for easier execution? (yes/no)"
-- **IF YES**: Execute `claude-code-spec-workflow generate-task-commands {feature-name}`
-- **IF NO**: Continue with traditional task execution approach
+- **WHEN APPROVED**: Add "✅ APPROVED" at the top of tasks.md after the main heading
+- Inform user: "Tasks approved! You can now execute them using `/spec-execute {task-id}` for sequential mode or `/spec-execute-parallel {task-ids}` for parallel mode."
 
 ## Critical Workflow Rules
 
@@ -304,7 +317,8 @@ If validation fails, use the feedback to break down tasks further and improve at
 - **MANDATORY**: Always analyze existing codebase before starting any phase
 - **Follow exact template structures** from the specified template files
 - **Do not proceed without explicit user approval** between phases
-- **Do not skip phases** - complete Requirements → Design → Tasks → Commands sequence
+- **Do not skip phases** - complete Requirements → Design → Tasks sequence
+- **Ask about execution mode** in Phase 3 before generating tasks
 
 ### Approval Requirements
 - **NEVER** proceed to the next phase without explicit user approval
@@ -320,12 +334,6 @@ If validation fails, use the feedback to break down tasks further and improve at
 - **Tasks**: Must follow tasks template structure exactly
 - **Include all template sections** - do not omit any required sections
 - **Reference the loaded templates** - all specification templates were loaded at the beginning
-
-### Task Command Generation
-- **ONLY** ask about task command generation AFTER tasks.md is approved
-- **Use NPX command**: `claude-code-spec-workflow generate-task-commands {feature-name}`
-- **User choice**: Always ask the user if they want task commands generated (yes/no)
-- **Restart requirement**: Inform user to restart Claude Code for new commands to be visible
 
 ## Error Handling
 

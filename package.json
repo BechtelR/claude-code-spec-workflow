@@ -1,7 +1,7 @@
 {
-  "name": "@pimzino/claude-code-spec-workflow",
-  "version": "1.5.9",
-  "description": "Automated workflows for Claude Code. Includes spec-driven development (Requirements → Design → Tasks → Implementation) with intelligent task execution, optional steering documents and streamlined bug fix workflow (Report → Analyze → Fix → Verify). We have a bonus and option real time dashboard to monitor your specs and tasks.",
+  "name": "@bechtelr/claude-code-spec-workflow",
+  "version": "2.0.0",
+  "description": "Enhanced automated workflows for Claude Code. Features dual-mode task execution (sequential/parallel), dependency tracking, task verification, and intelligent task execution. Includes spec-driven development (Requirements → Design → Tasks → Implementation) with optional steering documents and bug fix workflow. Real-time dashboard to monitor specs and tasks.",
   "main": "dist/index.js",
   "bin": {
     "claude-code-spec-workflow": "dist/cli.js",
@@ -50,12 +50,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pimzino/claude-code-spec-workflow.git"
+    "url": "git+https://github.com/BechtelR/claude-code-spec-workflow.git"
   },
   "bugs": {
-    "url": "https://github.com/pimzino/claude-code-spec-workflow/issues"
+    "url": "https://github.com/BechtelR/claude-code-spec-workflow/issues"
   },
-  "homepage": "https://github.com/pimzino/claude-code-spec-workflow#readme",
+  "homepage": "https://github.com/BechtelR/claude-code-spec-workflow#readme",
   "files": [
     "dist",
     "README.md",

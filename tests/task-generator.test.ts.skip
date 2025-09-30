@@ -1,21 +1,9 @@
-import { promises as fs } from 'fs';
-import { join } from 'path';
-import { tmpdir } from 'os';
-import { parseTasksFromMarkdown, generateTaskCommand, ParsedTask } from '../src/task-generator';
+import { parseAllTasksFromMarkdown, TaskInfo } from '../src/get-tasks';
+import { verifyTaskCompletion, extractFilePaths } from '../src/task-verification';
 
-describe('Task Generator', () => {
-  let tempDir: string;
-
-  beforeEach(async () => {
-    tempDir = await fs.mkdtemp(join(tmpdir(), 'task-generator-test-'));
-  });
-
-  afterEach(async () => {
-    await fs.rm(tempDir, { recursive: true, force: true });
-  });
-
-  describe('parseTasksFromMarkdown', () => {
-    test('should parse simple tasks correctly', () => {
+describe('Task Parser', () => {
+  describe('parseAllTasksFromMarkdown', () => {
+    test('should parse simple tasks with metadata correctly', () => {
       const tasksContent = `# Implementation Plan
 
 ## Tasks
@@ -23,33 +11,46 @@ describe('Task Generator', () => {
 - [ ] 1. Set up project structure
   - Create directory structure
   - _Requirements: 1.1_
+  - _Depends: none_
+  - _Parallel: yes_
 
 - [ ] 2. Implement data models
   - Create model classes
   - Add validation
   - _Leverage: existing-validator.ts_
   - _Requirements: 2.1, 2.2_
+  - _Depends: 1_
+  - _Parallel: no_
 
 - [ ] 3. Create API endpoints
   - Set up routing
   - _Requirements: 3.1_
+  - _Depends: 2_
+  - _Parallel: no_
 `;
 
-      const tasks = parseTasksFromMarkdown(tasksContent);
+      const tasks = parseAllTasksFromMarkdown(tasksContent);
 
       expect(tasks).toHaveLength(3);
-      
+
       // Task 1
       expect(tasks[0].id).toBe('1');
       expect(tasks[0].description).toBe('Set up project structure');
       expect(tasks[0].requirements).toBe('1.1');
       expect(tasks[0].leverage).toBeUndefined();
+      expect(tasks[0].dependsOn).toEqual([]);
+      expect(tasks[0].canRunParallel).toBe(true);
+      expect(tasks[0].level).toBe(0);
+      expect(tasks[0].parentId).toBeUndefined();
 
       // Task 2
       expect(tasks[1].id).toBe('2');
       expect(tasks[1].description).toBe('Implement data models');
       expect(tasks[1].requirements).toBe('2.1, 2.2');
       expect(tasks[1].leverage).toBe('existing-validator.ts');
+      expect(tasks[1].dependsOn).toEqual(['1']);
+      expect(tasks[1].canRunParallel).toBe(false);
+      expect(tasks[1].level).toBe(0);
 
       // Task 3
       expect(tasks[2].id).toBe('3');

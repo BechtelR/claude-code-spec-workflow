@@ -6,7 +6,7 @@ import inquirer from 'inquirer';
 import ora from 'ora';
 import { SpecWorkflowSetup } from './setup';
 import { detectProjectType, validateClaudeCode } from './utils';
-import { parseTasksFromMarkdown, generateTaskCommand } from './task-generator';
+// Task generator imports removed - no longer using task command generation
 import { getFileContent } from './get-content';
 import { getSteeringContext } from './get-steering-context';
 import { getSpecContext } from './get-spec-context';
@@ -238,82 +238,6 @@ program
     }
   });
 
-// Add generate-task-commands command
-program
-  .command('generate-task-commands')
-  .description('Generate individual task commands for a spec')
-  .argument('<spec-name>', 'Name of the spec to generate commands for')
-  .option('-p, --project <path>', 'Project directory', process.cwd())
-  .action(async (specName, options) => {
-    console.log(chalk.cyan('Generating task commands...'));
-    
-    const path = await import('path');
-    const fs = await import('fs/promises');
-    
-    const projectPath = options.project;
-    const specDir = path.join(projectPath, '.claude', 'specs', specName);
-    const tasksFile = path.join(specDir, 'tasks.md');
-    const commandsSpecDir = path.join(projectPath, '.claude', 'commands', specName);
-    
-    const spinner = ora(`Generating commands for spec: ${specName}`).start();
-    
-    try {
-      // Check if tasks.md exists
-      try {
-        await fs.access(tasksFile);
-      } catch {
-        spinner.fail(`tasks.md not found at ${tasksFile}`);
-        process.exit(1);
-      }
-      
-      // Read tasks.md
-      const tasksContent = await fs.readFile(tasksFile, 'utf8');
-      
-      // Create spec commands directory
-      await fs.mkdir(commandsSpecDir, { recursive: true });
-      
-      // Parse tasks and generate commands
-      const tasks = parseTasksFromMarkdown(tasksContent);
-      
-      let taskCount = 0;
-      for (const task of tasks) {
-        await generateTaskCommand(commandsSpecDir, specName, task);
-        taskCount++;
-      }
-      
-      spinner.succeed(`Generated ${taskCount} task commands for spec: ${specName}`);
-      
-      console.log();
-      console.log(chalk.green('Generated commands:'));
-      for (const task of tasks) {
-        console.log(chalk.gray(`  /${specName}-task-${task.id} - ${task.description}`));
-      }
-      
-      console.log();
-      console.log(chalk.yellow.bold('RESTART REQUIRED: You must restart Claude Code for the new commands to be visible'));
-      console.log();
-      console.log(chalk.cyan.bold('Instructions for the agent:'));
-      console.log(chalk.gray('Tell the user they must exit Claude Code and restart it using:'));
-      console.log(chalk.white('- Run "claude --continue" to continue this conversation with new commands'));
-      console.log(chalk.white('- Or run "claude" to start a fresh session'));
-      console.log(chalk.gray('The restart is absolutely necessary for the new task commands to appear.'));
-      console.log();
-      console.log(chalk.blue('After restart, you can use commands like:'));
-      if (tasks.length > 0) {
-        console.log(chalk.gray(`  /${specName}-task-${tasks[0].id}`));
-        if (tasks.length > 1) {
-          console.log(chalk.gray(`  /${specName}-task-${tasks[1].id}`));
-        }
-        console.log(chalk.gray('  etc.'));
-      }
-      
-    } catch (error) {
-      spinner.fail('Command generation failed');
-      console.error(chalk.red('Error:'), error instanceof Error ? error.message : error);
-      process.exit(1);
-    }
-  });
-
 // Add get-content command
 program
   .command('get-content')
@@ -358,18 +282,18 @@ program
   .description('Get tasks from a specification')
   .argument('<spec-name>', 'Name of the spec to get tasks from')
   .argument('[task-id]', 'Specific task ID to retrieve')
-  .option('-m, --mode <mode>', 'Mode: all, single, next-pending, or complete', 'all')
+  .option('-m, --mode <mode>', 'Mode: all, single, next-pending, complete, check-dependencies, or verify', 'all')
   .option('-p, --project <path>', 'Project directory', process.cwd())
   .action(async (specName, taskId, options) => {
-    let mode = options.mode as 'all' | 'single' | 'next-pending' | 'complete';
-    
+    let mode = options.mode as 'all' | 'single' | 'next-pending' | 'complete' | 'check-dependencies' | 'verify';
+
     // Auto-detect mode if taskId is provided and mode is default
     if (taskId && mode === 'all') {
       mode = 'single';
     }
-    
-    if (!['all', 'single', 'next-pending', 'complete'].includes(mode)) {
-      console.error(chalk.red('Error: Invalid mode. Use: all, single, next-pending, or complete'));
+
+    if (!['all', 'single', 'next-pending', 'complete', 'check-dependencies', 'verify'].includes(mode)) {
+      console.error(chalk.red('Error: Invalid mode. Use: all, single, next-pending, complete, check-dependencies, or verify'));
       process.exit(1);
     }
     await getTasks(specName, taskId, mode, options.project);

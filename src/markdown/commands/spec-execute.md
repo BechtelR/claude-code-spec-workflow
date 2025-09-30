@@ -16,6 +16,20 @@ This is Phase 4 of the spec workflow. Your goal is to implement individual tasks
 
 **Execution Steps**:
 
+**Step 0: Check Dependencies** (REQUIRED)
+```bash
+# Check if task dependencies are satisfied
+claude-code-spec-workflow get-tasks {feature-name} {task-id} --mode check-dependencies
+```
+
+**If dependencies are not met:**
+- The command will exit with error and show which tasks must complete first
+- You MUST complete blocking tasks before proceeding
+- Example error: "Task 3 cannot execute: Waiting for tasks 1, 2 to complete."
+
+**If dependencies are satisfied:**
+- Proceed to Step 1
+
 **Step 1: Load Context**
 ```bash
 # Load steering documents (if available)

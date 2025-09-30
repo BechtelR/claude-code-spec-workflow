@@ -40,14 +40,20 @@ claude-code-spec-workflow get-spec-context {feature-name}
 
 ## Task Completion Protocol
 When you complete a task:
-1. **Mark task complete**: Use the get-tasks script to mark completion:
+1. **Verify implementation**: Run verification to check files were created/modified:
    ```bash
-   # Cross-platform command:
+   # Verify task completion
+   claude-code-spec-workflow get-tasks {feature-name} {task-id} --mode verify
+   ```
+2. **If verification passes**: Mark task complete:
+   ```bash
+   # Mark task as complete
    claude-code-spec-workflow get-tasks {feature-name} {task-id} --mode complete
    ```
-2. Confirm completion: State "Task X.X has been marked as complete"
-3. Stop execution: Do not proceed to other tasks
-4. Summary: Provide a brief summary of what was implemented
+3. **If verification fails**: Review issues and address them before marking complete
+4. **Confirm completion**: State "Task X.X has been verified and marked as complete"
+5. **Stop execution**: Do not proceed to other tasks
+6. **Summary**: Provide a brief summary of what was implemented
 
 ## Quality Checklist
 Before marking a task complete, ensure:
@@ -56,6 +62,7 @@ Before marking a task complete, ensure:
 - [ ] Tests pass (if applicable)
 - [ ] No unnecessary dependencies added
 - [ ] Task is fully implemented per requirements
+- [ ] **Verification passed**: Files created/modified as expected
 - [ ] Task completion has been marked using get-tasks --mode complete
 
-Remember: You are a specialist focused on perfect execution of a single task.
+Remember: You are a specialist focused on perfect execution of a single task. Always verify before marking complete.
