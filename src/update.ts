@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
-import { parseTasksFromMarkdown, generateTaskCommand } from './task-generator';
+// Task command generation removed in v2.0.0
 
 export class SpecWorkflowUpdater {
   private projectRoot: string;
@@ -315,77 +315,11 @@ export class SpecWorkflowUpdater {
   }
 
   async regenerateTaskCommands(): Promise<void> {
-    console.log('Scanning for existing specs...');
-    
-    // Find all existing specs
-    let specDirs: string[] = [];
-    
-    try {
-      const specsEntries = await fs.readdir(this.specsDir, { withFileTypes: true });
-      specDirs = specsEntries
-        .filter(entry => entry.isDirectory())
-        .map(entry => entry.name);
-      
-      if (specDirs.length === 0) {
-        console.log('No specs found to regenerate task commands for.');
-        return;
-      }
-      
-      console.log(`Found ${specDirs.length} spec(s): ${specDirs.join(', ')}`);
-    } catch {
-      console.log('No specs directory found, skipping task command regeneration.');
-      // Specs directory might not exist
-      return;
-    }
-
-    // For each spec, regenerate task commands if tasks.md exists
-    for (const specName of specDirs) {
-      const specDir = join(this.specsDir, specName);
-      const tasksFile = join(specDir, 'tasks.md');
-      const commandsSpecDir = join(this.commandsDir, specName);
-      
-      try {
-        // Check if tasks.md exists
-        await fs.access(tasksFile);
-        
-        // Read tasks.md
-        const tasksContent = await fs.readFile(tasksFile, 'utf8');
-        
-        // Parse tasks and generate commands
-        const tasks = parseTasksFromMarkdown(tasksContent);
-        
-        if (tasks.length === 0) {
-          console.log(`  ${specName}: No tasks found in tasks.md (check format: "- [ ] 1. Task description"), skipping`);
-          continue;
-        }
-        
-        console.log(`  ${specName}: Regenerating ${tasks.length} task commands...`);
-        
-        // Delete existing task commands for this spec
-        try {
-          await fs.rm(commandsSpecDir, { recursive: true });
-        } catch {
-          // Directory might not exist
-        }
-        
-        // Create spec commands directory
-        await fs.mkdir(commandsSpecDir, { recursive: true });
-        
-        // Generate commands
-        for (const task of tasks) {
-          await generateTaskCommand(commandsSpecDir, specName, task);
-        }
-        
-        console.log(`  ${specName}: Generated commands for tasks: ${tasks.map(t => t.id).join(', ')}`);
-        
-      } catch {
-        console.log(`  ${specName}: No tasks.md found, skipping`);
-        // tasks.md doesn't exist for this spec, skip
-        continue;
-      }
-    }
-    
-    console.log('Task command regeneration complete!');
+    // Task command generation removed in v2.0.0
+    // Use /spec-execute {task-id} or /spec-execute-parallel instead
+    console.log('Task command generation has been removed in v2.0.0');
+    console.log('Use /spec-execute {task-id} for sequential execution');
+    console.log('Use /spec-execute-parallel {task-ids} for parallel execution');
   }
 
   /**

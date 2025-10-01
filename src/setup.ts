@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
-import { parseTasksFromMarkdown, generateTaskCommand } from './task-generator';
+// Task command generation removed in v2.0.0
 // CLAUDE.md generation removed - all workflow instructions now in individual commands
 // Script imports removed in v1.2.5 - task command generation now uses NPX command
 
@@ -278,76 +278,7 @@ export class SpecWorkflowSetup {
 
 
   // CLAUDE.md creation removed - all workflow instructions now in individual commands
-
-  /**
-   * Auto-generate task commands for all existing specs
-   */
-  async autoGenerateTaskCommands(): Promise<void> {
-    try {
-      // Check if specs directory exists
-      await fs.access(this.specsDir);
-    } catch {
-      // No specs directory, nothing to generate
-      return;
-    }
-
-    try {
-      const specsEntries = await fs.readdir(this.specsDir, { withFileTypes: true });
-      const specDirs = specsEntries
-        .filter(entry => entry.isDirectory())
-        .map(entry => entry.name);
-
-      if (specDirs.length === 0) {
-        return;
-      }
-
-      console.log(`Auto-generating task commands for ${specDirs.length} existing spec(s)...`);
-
-      for (const specName of specDirs) {
-        const tasksFile = join(this.specsDir, specName, 'tasks.md');
-        const commandsSpecDir = join(this.commandsDir, specName);
-
-        try {
-          // Check if tasks.md exists
-          await fs.access(tasksFile);
-
-          // Read tasks.md
-          const tasksContent = await fs.readFile(tasksFile, 'utf8');
-
-          // Parse tasks and generate commands
-          const tasks = parseTasksFromMarkdown(tasksContent);
-
-          if (tasks.length === 0) {
-            continue;
-          }
-
-          // Delete existing task commands for this spec
-          try {
-            await fs.rm(commandsSpecDir, { recursive: true });
-          } catch {
-            // Directory might not exist
-          }
-
-          // Create spec commands directory
-          await fs.mkdir(commandsSpecDir, { recursive: true });
-
-          // Generate commands
-          for (const task of tasks) {
-            await generateTaskCommand(commandsSpecDir, specName, task);
-          }
-
-          console.log(`  Generated ${tasks.length} task commands for spec: ${specName}`);
-
-        } catch {
-          // tasks.md doesn't exist for this spec, skip
-          continue;
-        }
-      }
-    } catch {
-      // Error reading specs directory, skip
-      return;
-    }
-  }
+  // Auto-generate task commands removed in v2.0.0 - use /spec-execute instead
 
   async runSetup(): Promise<void> {
     await this.setupDirectories();
@@ -357,8 +288,6 @@ export class SpecWorkflowSetup {
     // Script creation removed in v1.2.5 - using NPX command instead
     // spec-config.json creation removed - not required
     // CLAUDE.md creation removed - all workflow instructions now in individual commands
-
-    // Auto-generate task commands for existing specs
-    await this.autoGenerateTaskCommands();
+    // Auto-generate task commands removed in v2.0.0 - use /spec-execute instead
   }
 }
