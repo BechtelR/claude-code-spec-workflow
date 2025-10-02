@@ -69,6 +69,7 @@ You are helping create a new feature specification through the complete workflow
    - Look for .claude/steering/product.md (product vision and goals)
    - Look for .claude/steering/tech.md (technical standards and patterns)
    - Look for .claude/steering/structure.md (project structure conventions)
+   - Look for .claude/steering/standards.md (engineering standards and coding rules)
    - Load available steering documents to guide the entire workflow
 
 3. **Analyze Existing Codebase** (BEFORE starting any phase)
@@ -106,7 +107,7 @@ Use the spec-requirements-validator agent to validate the requirements document 
 The agent should:
 1. Read the requirements document from .claude/specs/{feature-name}/requirements.md
 2. Validate against all quality criteria (structure, user stories, acceptance criteria, etc.)
-3. Check alignment with steering documents (product.md, tech.md, structure.md)
+3. Check alignment with steering documents (product.md, tech.md, structure.md, standards.md)
 4. Provide specific feedback and improvement suggestions
 5. Rate the overall quality as PASS, NEEDS_IMPROVEMENT, or MAJOR_ISSUES
 
@@ -137,6 +138,7 @@ If validation fails, use the feedback to improve the requirements before present
    - **Catalog reusable utilities**: Find validation functions, helpers, middleware, hooks
    - **Document architectural decisions**: Note existing tech stack, state management, routing patterns
    - **Verify against structure.md**: Ensure file organization follows project conventions
+   - **Check engineering standards**: Review standards.md for coding patterns and anti-patterns
    - **Identify integration points**: Map how new feature connects to existing auth, database, APIs
 
 3. **Create Design Document**
@@ -144,6 +146,7 @@ If validation fails, use the feedback to improve the requirements before present
    - **Build on existing patterns** rather than creating new ones
    - **Follow tech.md standards**: Ensure design adheres to documented technical guidelines
    - **Respect structure.md conventions**: Organize components according to project structure
+   - **Adhere to standards.md**: Follow engineering standards, coding rules, and best practices
    - **Include Mermaid diagrams** for visual representation
    - **Define clear interfaces** that integrate with existing systems
 
@@ -162,7 +165,7 @@ The agent should:
 1. Read the design document from .claude/specs/{feature-name}/design.md
 2. Read the requirements document for context
 3. Validate technical soundness, architecture quality, and completeness
-4. Check alignment with tech.md standards and structure.md conventions
+4. Check alignment with tech.md standards, structure.md conventions, and standards.md engineering rules
 5. Verify proper leverage of existing code and integration points
 6. Rate the overall quality as PASS, NEEDS_IMPROVEMENT, or MAJOR_ISSUES
 
@@ -203,6 +206,7 @@ If validation fails, use the feedback to improve the design before presenting to
    
    **Implementation Guidelines**:
    - **Follow structure.md**: Ensure tasks respect project file organization
+   - **Follow standards.md**: Ensure tasks comply with engineering standards and coding rules
    - **Prioritize extending/adapting existing code** over building from scratch
    - Use checkbox format with numbered hierarchy
    - Each task should reference specific requirements AND existing code to leverage
@@ -335,6 +339,7 @@ Context files to load:
 - .claude/steering/product.md (if exists)
 - .claude/steering/tech.md (if exists)
 - .claude/steering/structure.md (if exists)
+- .claude/steering/standards.md (if exists)
 
 Task to implement: {task-id}
 \`\`\`
@@ -351,6 +356,7 @@ Task to implement: {task-id}
      - Load .claude/steering/product.md for product context
      - Load .claude/steering/tech.md for technical patterns
      - Load .claude/steering/structure.md for project conventions
+     - Load .claude/steering/standards.md for engineering standards
    - Identify the specific task to execute
 
 2. **Process**
@@ -372,7 +378,7 @@ Task to implement: {task-id}
 
 4. **Implementation Guidelines**
    - Write clean, maintainable code
-   - **Follow steering documents**: Adhere to patterns in tech.md and conventions in structure.md
+   - **Follow steering documents**: Adhere to patterns in tech.md, conventions in structure.md, and engineering standards in standards.md
    - Follow existing code patterns and conventions
    - Include appropriate error handling
    - Add unit tests where specified
@@ -555,7 +561,7 @@ You are helping set up steering documents that will guide all future spec develo
 
 1. **Check for Existing Steering Documents**
    - Look for \`.claude/steering/\` directory
-   - Check for existing product.md, tech.md, structure.md files
+   - Check for existing product.md, tech.md, structure.md, standards.md files
    - If they exist, load and display current content
 
 2. **Analyze the Project**
@@ -621,6 +627,7 @@ You are helping set up steering documents that will guide all future spec develo
      **product.md**: Product vision, users, features, objectives
      **tech.md**: Technology stack, tools, constraints, decisions
      **structure.md**: File organization, naming conventions, patterns
+     **standards.md**: Engineering standards, coding rules, patterns (keep focused and concise)
 
 6. **Review and Confirm**
    - Present the generated documents to the user
@@ -684,6 +691,7 @@ You are helping create a new bug fix workflow. This is designed for smaller fixe
 2. **Load Context** (if available)
    - Check for .claude/steering/tech.md for technical context
    - Check for .claude/steering/structure.md for project patterns
+   - Check for .claude/steering/standards.md for engineering standards
    - Load available steering documents to understand project context
 
 3. **Gather Bug Information**
@@ -766,9 +774,10 @@ You are working on the analysis phase of the bug fix workflow.
 1. **Prerequisites**
    - Ensure report.md exists and is complete
    - Load the bug report for context
-   - **Load steering documents**: 
+   - **Load steering documents**:
      - Check for .claude/steering/tech.md for technical patterns
      - Check for .claude/steering/structure.md for project organization
+     - Check for .claude/steering/standards.md for engineering standards
    - Understand the reported issue completely
 
 2. **Investigation Process**
@@ -803,6 +812,7 @@ You are working on the analysis phase of the bug fix workflow.
 4. **Investigation Guidelines**
    - **Follow tech.md standards**: Understand existing patterns before proposing changes
    - **Respect structure.md**: Know where fixes should be placed
+   - **Adhere to standards.md**: Follow engineering standards and coding rules
    - **Search thoroughly**: Look for existing utilities, similar bugs, related code
    - **Think systematically**: Consider data flow, error handling, edge cases
    - **Plan for testing**: How will you verify the fix works
@@ -870,9 +880,10 @@ You are working on the fix implementation phase of the bug fix workflow.
 1. **Prerequisites**
    - Ensure analysis.md exists and is approved
    - Load report.md and analysis.md for complete context
-   - **Load steering documents**: 
+   - **Load steering documents**:
      - Load .claude/steering/tech.md for technical patterns
      - Load .claude/steering/structure.md for project conventions
+     - Load .claude/steering/standards.md for engineering standards
    - Understand the planned fix approach completely
 
 2. **Implementation Process**
@@ -894,7 +905,7 @@ You are working on the fix implementation phase of the bug fix workflow.
       - Run tests and checks
 
 3. **Implementation Guidelines**
-   - **Follow steering documents**: Adhere to patterns in tech.md and conventions in structure.md
+   - **Follow steering documents**: Adhere to patterns in tech.md, conventions in structure.md, and engineering standards in standards.md
    - **Make minimal changes**: Fix only what's necessary
    - **Preserve existing behavior**: Don't break unrelated functionality
    - **Use existing patterns**: Leverage established code patterns and utilities

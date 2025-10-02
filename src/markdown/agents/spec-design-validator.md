@@ -33,6 +33,7 @@ claude-code-spec-workflow get-content "/path/to/project/.claude/templates/design
 
 ### 3. **Technical Standards Compliance**
 - Design follows tech.md standards (if available)
+- Adheres to engineering standards from standards.md (if available)
 - Uses established project patterns and conventions
 - Technology choices align with existing tech stack
 - Security considerations are properly addressed
@@ -78,7 +79,7 @@ claude-code-spec-workflow get-content "/path/to/project/.claude/templates/design
 5. **Validate requirements coverage**: Ensure ALL requirements from requirements.md are addressed in the design
 6. **Check requirements alignment**: Verify design solutions match the acceptance criteria and user stories
 7. **Check against architectural best practices**
-8. **Verify alignment with tech.md and structure.md**
+8. **Verify alignment with tech.md, structure.md, and standards.md** (from steering context)
 9. **Assess technical feasibility and completeness**
 10. **Validate Mermaid diagrams make sense**
 11. **Rate overall quality as: PASS, NEEDS_IMPROVEMENT, or MAJOR_ISSUES**

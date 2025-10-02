@@ -81,8 +81,7 @@ const mockTask: Task = {
   description: 'Test task',
   completed: false,
   requirements: ['req1', 'req2'],
-  leverage: 'utils.ts',
-  details: ['Detail 1', 'Detail 2']
+  leverage: 'utils.ts'
 };
 
 const mockRequirement: RequirementDetail = {

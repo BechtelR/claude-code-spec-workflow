@@ -5,6 +5,7 @@ export interface SteeringDocuments {
   product?: string;
   tech?: string;
   structure?: string;
+  standards?: string;
 }
 
 export class SteeringLoader {
@@ -26,6 +27,7 @@ export class SteeringLoader {
       const productPath = join(this.steeringDir, 'product.md');
       const techPath = join(this.steeringDir, 'tech.md');
       const structurePath = join(this.steeringDir, 'structure.md');
+      const standardsPath = join(this.steeringDir, 'standards.md');
 
       try {
         docs.product = await fs.readFile(productPath, 'utf-8');
@@ -44,6 +46,12 @@ export class SteeringLoader {
       } catch {
         // Structure doc not found, that's okay
       }
+
+      try {
+        docs.standards = await fs.readFile(standardsPath, 'utf-8');
+      } catch {
+        // Standards doc not found, that's okay
+      }
     } catch {
       // Steering directory doesn't exist, return empty docs
     }
@@ -55,7 +63,7 @@ export class SteeringLoader {
     try {
       await fs.access(this.steeringDir);
       const files = await fs.readdir(this.steeringDir);
-      return files.some(file => ['product.md', 'tech.md', 'structure.md'].includes(file));
+      return files.some(file => ['product.md', 'tech.md', 'structure.md', 'standards.md'].includes(file));
     } catch {
       return false;
     }
@@ -74,6 +82,10 @@ export class SteeringLoader {
 
     if (docs.structure) {
       sections.push('## Structure Context\n' + docs.structure);
+    }
+
+    if (docs.standards) {
+      sections.push('## Engineering Standards\n' + docs.standards);
     }
 
     if (sections.length === 0) {

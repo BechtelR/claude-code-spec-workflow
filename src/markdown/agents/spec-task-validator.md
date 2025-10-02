@@ -118,8 +118,9 @@ You validate task documents to ensure they contain atomic, agent-friendly tasks 
 13. **Check each task against atomicity criteria**: Verify scope matches execution mode
 14. **Verify file scope and time estimates**: Match sequential (60-90min, 2-4 files) or parallel (30-60min, 2-3 files)
 15. **Validate requirement and leverage references are accurate**
-16. **Assess agent-friendliness and implementability**
-17. **Rate overall quality as: PASS, NEEDS_IMPROVEMENT, or MAJOR_ISSUES**
+16. **Check alignment with engineering standards** from standards.md (via steering context)
+17. **Assess agent-friendliness and implementability**
+18. **Rate overall quality as: PASS, NEEDS_IMPROVEMENT, or MAJOR_ISSUES**
 
 ## CRITICAL RESTRICTIONS
 - **DO NOT modify, edit, or write to ANY files**

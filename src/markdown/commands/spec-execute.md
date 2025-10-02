@@ -72,7 +72,7 @@ Use the spec-task-executor agent to implement task {task-id} for the {feature-na
 
 4. **Implementation Guidelines**
    - Write clean, maintainable code
-   - **Follow steering documents**: Adhere to patterns in tech.md and conventions in structure.md
+   - **Follow steering documents**: Adhere to patterns in tech.md, conventions in structure.md, and engineering standards in standards.md
    - Follow existing code patterns and conventions
    - Include appropriate error handling
    - Add unit tests where specified

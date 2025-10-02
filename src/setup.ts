@@ -120,6 +120,7 @@ export class SpecWorkflowSetup {
         'product-template.md',
         'tech-template.md',
         'structure-template.md',
+        'standards-template.md',
         'bug-report-template.md',
         'bug-analysis-template.md',
         'bug-verification-template.md'
@@ -180,6 +181,7 @@ export class SpecWorkflowSetup {
     const commandNames = [
       'spec-create',
       'spec-execute',
+      'spec-execute-parallel',
       'spec-status',
       'spec-list',
       'spec-steering-setup',
@@ -219,6 +221,7 @@ export class SpecWorkflowSetup {
       'product-template.md',
       'tech-template.md',
       'structure-template.md',
+      'standards-template.md',
       'bug-report-template.md',
       'bug-analysis-template.md',
       'bug-verification-template.md'

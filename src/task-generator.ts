@@ -126,7 +126,8 @@ function loadSteeringContext(projectPath: string): string {
   const steeringFiles = [
     { name: 'product.md', title: 'Product Context' },
     { name: 'tech.md', title: 'Technology Context' },
-    { name: 'structure.md', title: 'Structure Context' }
+    { name: 'structure.md', title: 'Structure Context' },
+    { name: 'standards.md', title: 'Engineering Standards' }
   ];
 
   const sections: string[] = [];

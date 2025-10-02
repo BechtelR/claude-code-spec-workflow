@@ -219,6 +219,7 @@ export class SpecWorkflowUpdater {
       'product-template.md',
       'tech-template.md',
       'structure-template.md',
+      'standards-template.md',
       'bug-report-template.md',
       'bug-analysis-template.md',
       'bug-verification-template.md'

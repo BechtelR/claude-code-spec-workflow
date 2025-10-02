@@ -47,13 +47,16 @@ describe('SpecWorkflowSetup', () => {
     const commandsDir = join(tempDir, '.claude', 'commands');
     const expectedCommands = [
       'spec-create.md',
-      'spec-requirements.md',
-      'spec-design.md',
-      'spec-tasks.md',
       'spec-execute.md',
+      'spec-execute-parallel.md',
       'spec-status.md',
       'spec-list.md',
-      'spec-steering-setup.md'
+      'spec-steering-setup.md',
+      'bug-create.md',
+      'bug-analyze.md',
+      'bug-fix.md',
+      'bug-verify.md',
+      'bug-status.md'
     ];
 
     for (const command of expectedCommands) {
@@ -62,7 +65,9 @@ describe('SpecWorkflowSetup', () => {
 
       const content = await fs.readFile(commandPath, 'utf-8');
       expect(content.length).toBeGreaterThan(0);
-      expect(content).toContain('# Spec');
+      // Each command should have a header (either "# Spec" or "# Bug")
+      const hasHeader = content.includes('# Spec') || content.includes('# Bug');
+      expect(hasHeader).toBe(true);
     }
   });
 
@@ -88,19 +93,9 @@ describe('SpecWorkflowSetup', () => {
 
   // NOTE: Scripts test removed in v1.2.5 - task command generation now uses NPX command
 
-  test('should create config file', async () => {
-    await setup.setupDirectories();
-    await setup.createConfigFile();
-
-    const configPath = join(tempDir, '.claude', 'spec-config.json');
-    await expect(fs.access(configPath)).resolves.not.toThrow();
-
-    const content = await fs.readFile(configPath, 'utf-8');
-    const config = JSON.parse(content);
-
-    expect(config).toHaveProperty('spec_workflow');
-    expect(config.spec_workflow).toHaveProperty('version');
-    expect(config.spec_workflow).toHaveProperty('auto_create_directories');
+  // Config file creation removed - no longer part of setup process
+  test.skip('should create config file', async () => {
+    // This functionality has been removed from the setup process
   });
 
   // CLAUDE.md creation removed in newer versions - all workflow instructions now in individual commands
@@ -116,31 +111,28 @@ describe('SpecWorkflowSetup', () => {
     const claudeDir = join(tempDir, '.claude');
     const commandsDir = join(claudeDir, 'commands');
     const templatesDir = join(claudeDir, 'templates');
-    const configPath = join(claudeDir, 'spec-config.json');
-    const claudeMdPath = join(tempDir, 'CLAUDE.md');
+    const agentsDir = join(claudeDir, 'agents');
 
     await expect(fs.access(claudeDir)).resolves.not.toThrow();
     await expect(fs.access(commandsDir)).resolves.not.toThrow();
     await expect(fs.access(templatesDir)).resolves.not.toThrow();
-    await expect(fs.access(configPath)).resolves.not.toThrow();
-    await expect(fs.access(claudeMdPath)).resolves.not.toThrow();
+    await expect(fs.access(agentsDir)).resolves.not.toThrow();
 
-    // Check that files have content
-    const claudeMdContent = await fs.readFile(claudeMdPath, 'utf-8');
-    expect(claudeMdContent.length).toBeGreaterThan(1000);
+    // Check that at least one command file exists
+    const specCreatePath = join(commandsDir, 'spec-create.md');
+    await expect(fs.access(specCreatePath)).resolves.not.toThrow();
+
+    // Check that at least one template exists
+    const reqTemplatePath = join(templatesDir, 'requirements-template.md');
+    await expect(fs.access(reqTemplatePath)).resolves.not.toThrow();
+
+    // Check that at least one agent exists
+    const taskExecutorPath = join(agentsDir, 'spec-task-executor.md');
+    await expect(fs.access(taskExecutorPath)).resolves.not.toThrow();
   });
 
-  test('should handle existing CLAUDE.md', async () => {
-    // Create existing CLAUDE.md with content
-    const existingContent = '# My Project\n\nThis is my existing project documentation.\n';
-    await fs.writeFile(join(tempDir, 'CLAUDE.md'), existingContent);
-
-    await setup.setupDirectories();
-    await setup.createClaudeMd();
-
-    const claudeMdContent = await fs.readFile(join(tempDir, 'CLAUDE.md'), 'utf-8');
-    expect(claudeMdContent).toContain('# My Project');
-    expect(claudeMdContent).toContain('# Spec Workflow');
-    expect(claudeMdContent).toContain('existing project documentation');
+  // CLAUDE.md handling removed - no longer part of setup
+  test.skip('should handle existing CLAUDE.md', async () => {
+    // This functionality has been removed - CLAUDE.md is no longer created or modified
   });
 });

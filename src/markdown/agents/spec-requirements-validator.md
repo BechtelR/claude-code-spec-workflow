@@ -53,6 +53,7 @@ claude-code-spec-workflow get-content "/path/to/project/.claude/templates/requir
 - Requirements align with product.md vision (if available)
 - Leverages existing capabilities mentioned in steering documents
 - Fits within established project architecture
+- Respects engineering standards from standards.md (if available)
 
 ## Validation Process
 1. **Context Priority Handling**:

@@ -111,7 +111,7 @@ The agent should:
    claude-code-spec-workflow get-content "/path/to/project/.claude/specs/{feature-name}/requirements.md"
    ```
 2. Validate against all quality criteria (structure, user stories, acceptance criteria, etc.)
-3. Check alignment with steering documents (product.md, tech.md, structure.md)
+3. Check alignment with steering documents (product.md, tech.md, structure.md, standards.md)
 4. Provide specific feedback and improvement suggestions
 5. Rate the overall quality as PASS, NEEDS_IMPROVEMENT, or MAJOR_ISSUES
 
@@ -148,6 +148,7 @@ If validation fails, use the feedback to improve the requirements before present
    - **Catalog reusable utilities**: Find validation functions, helpers, middleware, hooks
    - **Document architectural decisions**: Note existing tech stack, state management, routing patterns
    - **Verify against structure.md**: Ensure file organization follows project conventions
+   - **Check engineering standards**: Review standards.md for coding patterns and anti-patterns
    - **Identify integration points**: Map how new feature connects to existing auth, database, APIs
 
 3. **Create Design Document**
@@ -156,6 +157,7 @@ If validation fails, use the feedback to improve the requirements before present
    - **Build on existing patterns** rather than creating new ones
    - **Follow tech.md standards**: Ensure design adheres to documented technical guidelines
    - **Respect structure.md conventions**: Organize components according to project structure
+   - **Adhere to standards.md**: Follow engineering standards, coding rules, and best practices
    - **Include Mermaid diagrams** for visual representation
    - **Define clear interfaces** that integrate with existing systems
 
@@ -185,7 +187,7 @@ The agent should:
    ```
 2. Read the requirements document for context
 3. Validate technical soundness, architecture quality, and completeness
-4. Check alignment with tech.md standards and structure.md conventions
+4. Check alignment with tech.md standards, structure.md conventions, and standards.md engineering rules
 5. Verify proper leverage of existing code and integration points
 6. Rate the overall quality as PASS, NEEDS_IMPROVEMENT, or MAJOR_ISSUES
 
@@ -257,6 +259,7 @@ claude-code-spec-workflow get-content "/path/to/project/.claude/templates/tasks-
 
    **Implementation Guidelines**:
    - **Follow structure.md**: Ensure tasks respect project file organization
+   - **Follow standards.md**: Ensure tasks comply with engineering standards and coding rules
    - **Prioritize extending/adapting existing code** over building from scratch
    - Use checkbox format with numbered hierarchy
    - Each task MUST include all required metadata

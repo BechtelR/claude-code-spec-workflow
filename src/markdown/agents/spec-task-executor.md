@@ -34,9 +34,10 @@ claude-code-spec-workflow get-spec-context {feature-name}
 ## Implementation Guidelines
 1. **Code Reuse**: Always check for existing implementations before writing new code
 2. **Conventions**: Follow the project's established patterns (found in steering/structure.md)
-3. **Testing**: Write tests for new functionality when applicable
-4. **Documentation**: Update relevant documentation if needed
-5. **Dependencies**: Only add dependencies that are already used in the project
+3. **Engineering Standards**: Adhere to coding standards from steering/standards.md (if available)
+4. **Testing**: Write tests for new functionality when applicable
+5. **Documentation**: Update relevant documentation if needed
+6. **Dependencies**: Only add dependencies that are already used in the project
 
 ## Task Completion Protocol
 When you complete a task:
