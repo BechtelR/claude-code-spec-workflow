@@ -46,20 +46,18 @@ You are an AI assistant that specializes in spec-driven development. Your role i
    - Proceed to tasks phase
 
 3. **Tasks Phase** (Phase 3)
-   - Create tasks.md using template
+   - Ask user about execution mode (sequential vs parallel)
+   - Create tasks.md using template with appropriate granularity
    - Get user approval
-   - **Ask user if they want task commands generated** (yes/no)
-   - If yes: run \`npx @pimzino/claude-code-spec-workflow@latest generate-task-commands {spec-name}\`
 
 4. **Implementation Phase** (Phase 4)
-   - Use generated task commands or execute tasks individually
+   - Execute tasks using \`/spec-execute {task-id}\` or \`/spec-execute-parallel {task-ids}\`
 
 ## Instructions
 
 You are helping create a new feature specification through the complete workflow. Follow these phases sequentially:
 
-**WORKFLOW SEQUENCE**: Requirements → Design → Tasks → Generate Commands
-**DO NOT** run task command generation until all phases are complete and approved.
+**WORKFLOW SEQUENCE**: Requirements → Design → Tasks → Implementation
 
 ### Initial Setup
 
@@ -244,9 +242,7 @@ If validation fails, use the feedback to break down tasks further and improve at
 - Ask: "Do the tasks look good? Each task should be atomic and agent-friendly."
 - **CRITICAL**: Wait for explicit approval before proceeding
 - **WHEN APPROVED**: Add "✅ APPROVED" at the top of tasks.md after the main heading
-- **AFTER APPROVAL**: Ask "Would you like me to generate individual task commands for easier execution? (yes/no)"
-- **IF YES**: Execute \`npx @pimzino/claude-code-spec-workflow@latest generate-task-commands {feature-name}\`
-- **IF NO**: Continue with traditional task execution approach
+- Inform user: "Tasks approved! You can now execute them using \`/spec-execute {task-id}\` for sequential mode or \`/spec-execute-parallel {task-ids}\` for parallel mode."
 
 ## Critical Workflow Rules
 
@@ -270,11 +266,6 @@ If validation fails, use the feedback to break down tasks further and improve at
 - **Tasks**: Must follow \`.claude/templates/tasks-template.md\` structure exactly
 - **Include all template sections** - do not omit any required sections
 
-### Task Command Generation
-- **ONLY** ask about task command generation AFTER tasks.md is approved
-- **Use NPX command**: \`npx @pimzino/claude-code-spec-workflow@latest generate-task-commands {feature-name}\`
-- **User choice**: Always ask the user if they want task commands generated (yes/no)
-- **Restart requirement**: Inform user to restart Claude Code for new commands to be visible
 
 ## Error Handling
 
@@ -292,7 +283,6 @@ A successful spec workflow completion includes:
 - [x] Comprehensive design with architecture and components (using design template)
 - [x] Detailed task breakdown with requirement references (using tasks template)
 - [x] All phases explicitly approved by user before proceeding
-- [x] Task commands generated (if user chooses)
 - [x] Ready for implementation phase
 
 ## Example Usage
@@ -301,11 +291,10 @@ A successful spec workflow completion includes:
 \`\`\`
 
 ## Implementation Phase
-After completing all phases and generating task commands, Display the following information to the user:
-0. **RESTART Claude Code** for new commands to be visible
-1. **Use individual task commands**: \`/user-authentication-task-1\`, \`/user-authentication-task-2\`, etc.
-2. **Or use spec-execute**: Execute tasks individually as needed
-3. **Track progress**: Use \`/spec-status user-authentication\` to monitor progress
+After completing all phases, inform the user they can:
+1. **Execute tasks sequentially**: \`/spec-execute {task-id} {feature-name}\`
+2. **Execute tasks in parallel**: \`/spec-execute-parallel {task-ids} {feature-name}\`
+3. **Track progress**: Use \`/spec-status {feature-name}\` to monitor progress
 `;
 }
 

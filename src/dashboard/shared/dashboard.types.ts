@@ -783,7 +783,7 @@ export interface AppStateMethods {
   getProjectSlug(_project: Project): string;
 
   // Command Copying Methods
-  /** Copy next task command to clipboard */
+  /** Copy next task execution command to clipboard */
   copyNextTaskCommand(_spec: Spec, _event: Event): void;
   /** Copy orchestrate command to clipboard */
   copyOrchestrateCommand(_spec: Spec, _event: Event): void;

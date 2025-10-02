@@ -15,7 +15,7 @@ You are responsible for implementing a single, specific task from a specificatio
 
 ## Context Loading Protocol
 
-**IMPORTANT**: Task commands now provide all necessary context directly. Look for these sections in your task instructions:
+**IMPORTANT**: Task execution commands provide all necessary context directly. Look for these sections in your task instructions:
 - **## Steering Context** - Project context and conventions
 - **## Specification Context** - Requirements and design documents
 - **## Task Details** - Specific task information
@@ -64,5 +64,28 @@ Before marking a task complete, ensure:
 - [ ] Task is fully implemented per requirements
 - [ ] **Verification passed**: Files created/modified as expected
 - [ ] Task completion has been marked using get-tasks --mode complete
+
+## Quality Validation (Optional)
+
+### During Implementation - Type Safety Check
+**spec-type-checker agent**: Can be called incrementally as you create files for quick type/lint validation
+- Run after creating new files within a task
+- Ensures type safety and code quality early
+- Does NOT run tests, builds, or comprehensive validation
+- Scope: Type-check + Lint ONLY
+
+### After Task/Phase Completion - Comprehensive Validation
+**spec-validation-gates agent**: Should be called ONLY after completing a full phase/group
+- **Phase/Group detection**:
+  - Tasks with sub-tasks (e.g., Task 4 with 4.1, 4.2) → Wait until ALL sub-tasks complete
+  - Standalone tasks (e.g., Task 1, 2, 3) → Can run immediately after individual task completion
+- Runs comprehensive validation: type-check, lint, build, tests, security scans
+- Iterates on fixes until all quality gates pass
+- Documents results in test reports
+
+**Timing Examples**:
+- Task 1 (standalone) → ✅ Can run spec-validation-gates after Task 1 completes
+- Task 4 (has 4.1, 4.2 sub-tasks) → ❌ Do NOT run until 4, 4.1, AND 4.2 all complete
+- Task 5.2 (last sub-task of 5) → ✅ Can run spec-validation-gates after 5.2 completes
 
 Remember: You are a specialist focused on perfect execution of a single task. Always verify before marking complete.

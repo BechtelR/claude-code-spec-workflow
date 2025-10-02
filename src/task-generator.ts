@@ -1,6 +1,11 @@
 /**
  * Task command generation utilities
- * Parses tasks.md files and generates individual command files
+ *
+ * @deprecated Since v2.0.0 - Task command generation has been removed.
+ * Use /spec-execute {task-id} for sequential execution or
+ * /spec-execute-parallel {task-ids} for parallel execution instead.
+ *
+ * This file is kept for backward compatibility but is no longer used.
  */
 
 import * as path from 'path';

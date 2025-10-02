@@ -122,7 +122,7 @@ program
         console.log(chalk.yellow('🔄 Update Process:'));
         console.log(chalk.gray('- Complete .claude directory will be backed up automatically'));
         console.log(chalk.gray('- Fresh installation will be created with latest versions'));
-        console.log(chalk.gray('- Your specs and task commands will be restored from backup'));
+        console.log(chalk.gray('- Your specs will be restored from backup'));
         console.log(chalk.green('✓ Your spec documents (requirements.md, design.md, tasks.md) will be preserved'));
         console.log();
       }
@@ -133,10 +133,9 @@ program
         console.log(chalk.cyan('This will create:'));
         console.log(chalk.gray('  .claude/ directory structure'));
         console.log(chalk.gray('  14 slash commands (9 spec workflow + 5 bug fix workflow)'));
-        console.log(chalk.gray('  Auto-generated task commands for existing specs'));
+        console.log(chalk.gray('  Dual-mode task execution (sequential/parallel)'));
         console.log(chalk.gray('  Intelligent orchestrator for automated execution'));
         console.log(chalk.gray('  Document templates'));
-        console.log(chalk.gray('  NPX-based task command generation'));
         console.log(chalk.gray('  Complete workflow instructions embedded in each command'));
         console.log(chalk.gray('  Claude Code sub-agents (mandatory)'));
         console.log();

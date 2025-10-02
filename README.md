@@ -37,7 +37,7 @@ claude-code-spec-workflow
 - **📁 Complete .claude/ structure** - All files and directories
 - **📝 10 slash commands** - 5 spec workflow + 5 bug fix workflow
 - **🎯 Intelligent task execution** - Automated implementation
-- **🤖 4 specialized agents** - Enhanced automation
+- **🤖 6 specialized agents** - Enhanced automation with quality validation
 - **📊 Real-time dashboard** - Monitor progress visually
 - **🔧 Auto-generated commands** - One command per task
 - **📋 Document templates** - Professional spec documents
@@ -60,13 +60,15 @@ claude-code-spec-workflow
 1. **Requirements** → User stories + acceptance criteria
 2. **Design** → Technical architecture + diagrams
 3. **Tasks** → Atomic, agent-friendly breakdown
-4. **Commands** → Auto-generated task commands (optional)
+4. **Implementation** → Execute with `/spec-execute` or `/spec-execute-parallel`
 
 **Execute tasks:**
 ```bash
-# Manual control
+# Sequential execution
 /spec-execute 1 feature-name
-/feature-name-task-1        # Auto-generated
+
+# Parallel execution
+/spec-execute-parallel 1 2 3 feature-name
 ```
 
 ### 🐛 **Bug Fix Workflow** (Quick Fixes)
@@ -95,8 +97,8 @@ claude-code-spec-workflow
 |---------|---------|
 | `/spec-steering-setup` | Create project context documents |
 | `/spec-create <name>` | Complete spec workflow |
-| `/spec-execute <task-id>` | Manual task execution |
-| `/<name>-task-<id>` | Auto-generated task commands |
+| `/spec-execute <task-id>` | Sequential task execution |
+| `/spec-execute-parallel <task-ids>` | Parallel task execution |
 | `/spec-status` | Show progress |
 | `/spec-list` | List all specs |
 
@@ -125,9 +127,11 @@ claude-code-spec-workflow
 - **Agent-based** implementation with spec-task-executor
 
 ### 🧠 **Specialized Agents** (Optional)
-4 AI agents for enhanced automation:
+6 AI agents for enhanced automation:
 
 **Core Workflow:** `spec-task-executor`, `spec-requirements-validator`, `spec-design-validator`, `spec-task-validator`
+
+**Quality Validation:** `spec-type-checker`, `spec-validation-gates`
 
 
 > **Note:** Agents are optional - everything works with built-in fallbacks.

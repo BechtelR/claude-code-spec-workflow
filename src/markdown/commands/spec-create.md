@@ -351,7 +351,6 @@ A successful spec workflow completion includes:
 - [x] Comprehensive design with architecture and components (using design template)
 - [x] Detailed task breakdown with requirement references (using tasks template)
 - [x] All phases explicitly approved by user before proceeding
-- [x] Task commands generated (if user chooses)
 - [x] Ready for implementation phase
 
 ## Example Usage
@@ -360,8 +359,7 @@ A successful spec workflow completion includes:
 ```
 
 ## Implementation Phase
-After completing all phases and generating task commands, Display the following information to the user:
-0. **RESTART Claude Code** for new commands to be visible
-1. **Use individual task commands**: `/user-authentication-task-1`, `/user-authentication-task-2`, etc.
-2. **Or use spec-execute**: Execute tasks individually as needed
-3. **Track progress**: Use `/spec-status user-authentication` to monitor progress
+After completing all phases, inform the user they can:
+1. **Execute tasks sequentially**: `/spec-execute {task-id} {feature-name}`
+2. **Execute tasks in parallel**: `/spec-execute-parallel {task-ids} {feature-name}`
+3. **Track progress**: Use `/spec-status {feature-name}` to monitor progress

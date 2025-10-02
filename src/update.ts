@@ -116,7 +116,7 @@ export class SpecWorkflowUpdater {
   }
 
   /**
-   * Restore user content (specs and task commands) from backup
+   * Restore user content (specs) from backup
    */
   async restoreUserContent(backupDir: string): Promise<void> {
     // The backup directory IS the .claude directory (from createBackup method)
@@ -149,30 +149,7 @@ export class SpecWorkflowUpdater {
         console.log('No specs found in backup to restore');
       }
 
-      // Restore task command directories if they exist in backup
-      try {
-        await fs.access(backupCommandsDir);
-        const commandEntries = await fs.readdir(backupCommandsDir, { withFileTypes: true });
-        const taskCommandDirs = commandEntries.filter(entry => entry.isDirectory());
-
-        if (taskCommandDirs.length > 0) {
-          console.log(`Restoring ${taskCommandDirs.length} task command folder(s) from backup...`);
-          
-          // Ensure commands directory exists
-          await fs.mkdir(this.commandsDir, { recursive: true });
-          
-          // Copy each task command directory (these are spec-specific)
-          for (const taskDir of taskCommandDirs) {
-            const sourceTaskDir = join(backupCommandsDir, taskDir.name);
-            const destTaskDir = join(this.commandsDir, taskDir.name);
-            await this.copyDirectory(sourceTaskDir, destTaskDir);
-            console.log(`  Restored task commands: ${taskDir.name}`);
-          }
-        }
-      } catch {
-        // No task command directories in backup, that's fine
-        console.log('No task command directories found in backup to restore');
-      }
+      // Task command restoration removed in v2.0.0 - no longer generated
 
       // Restore settings.local.json if it exists in backup
       try {
@@ -195,7 +172,7 @@ export class SpecWorkflowUpdater {
   }
 
   async updateCommands(): Promise<void> {
-    // List of default command files to update (exclude task command folders)
+    // List of default command files to update
     const commandNames = [
       'spec-create',
       'spec-execute',
@@ -281,9 +258,11 @@ export class SpecWorkflowUpdater {
     // List of available agent files
     const agentFiles = [
       'spec-requirements-validator.md',
-      'spec-design-validator.md', 
+      'spec-design-validator.md',
       'spec-task-validator.md',
       'spec-task-executor.md',
+      'spec-type-checker.md',
+      'spec-validation-gates.md',
     ];
 
     // Only delete known default agent files (preserve custom agents)
@@ -341,18 +320,15 @@ export class SpecWorkflowUpdater {
       await setup.runSetup();
       console.log('Fresh installation complete');
       
-      // 4. Restore user content (specs and task commands)
+      // 4. Restore user content (specs)
       await this.restoreUserContent(backupDir);
-
-      // 5. Auto-generate task commands for restored specs
-      await this.regenerateTaskCommands();
 
       console.log('Fresh installation update complete!');
       
     } catch (error) {
       console.error('Fresh installation update failed:', error);
       console.log(`Your data is safely backed up in: ${backupDir}`);
-      console.log('You can manually restore your specs and task commands from the backup if needed.');
+      console.log('You can manually restore your specs from the backup if needed.');
       throw error;
     }
   }

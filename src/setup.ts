@@ -139,6 +139,8 @@ export class SpecWorkflowSetup {
         'spec-design-validator.md',
         'spec-task-validator.md',
         'spec-task-executor.md',
+        'spec-type-checker.md',
+        'spec-validation-gates.md',
       ];
 
       for (const agentFile of requiredAgents) {
@@ -252,6 +254,8 @@ export class SpecWorkflowSetup {
       'spec-design-validator.md',
       'spec-task-validator.md',
       'spec-task-executor.md',
+      'spec-type-checker.md',
+      'spec-validation-gates.md',
     ];
 
     for (const agentFile of agentFiles) {
