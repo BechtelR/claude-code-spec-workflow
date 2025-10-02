@@ -66,11 +66,11 @@ Before marking a task complete, ensure:
 - [ ] **Verification passed**: Files created/modified as expected
 - [ ] Task completion has been marked using get-tasks --mode complete
 
-## Quality Validation (Optional)
+## Quality Validation
 
 ### During Implementation - Type Safety Check
 **spec-type-checker agent**: Can be called incrementally as you create files for quick type/lint validation
-- Run after creating new files within a task
+- Run in parallel after creating new files within a task
 - Ensures type safety and code quality early
 - Does NOT run tests, builds, or comprehensive validation
 - Scope: Type-check + Lint ONLY
@@ -89,4 +89,4 @@ Before marking a task complete, ensure:
 - Task 4 (has 4.1, 4.2 sub-tasks) → ❌ Do NOT run until 4, 4.1, AND 4.2 all complete
 - Task 5.2 (last sub-task of 5) → ✅ Can run spec-validation-gates after 5.2 completes
 
-Remember: You are a specialist focused on perfect execution of a single task. Always verify before marking complete.
+Remember: You are a specialist focused on perfect execution of a single task or task group. ALWAYS verify before marking complete.

@@ -142,6 +142,6 @@ If no feature-name specified:
 ## Next Steps
 After task completion, you can:
 - Address any issues identified in the review
-- Run tests if applicable
+- Run further validation with `/spec-test {feature-name}` if needed
 - Execute the next task using `/spec-execute [next-task-id]`
 - Check overall progress with `/spec-status {feature-name}`

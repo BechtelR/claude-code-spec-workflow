@@ -107,6 +107,7 @@ claude
 | `/spec-create <name>` | Complete spec workflow |
 | `/spec-update <name>` | Update existing spec with intelligent preservation |
 | `/spec-tasks-rebuild <name>` | Rebuild tasks.md for existing spec |
+| `/spec-test <name> [type]` | Test and validate feature implementation |
 | `/spec-execute <task-id>` | Sequential task execution |
 | `/spec-execute-parallel <task-ids>` | Parallel task execution |
 | `/spec-status` | Show progress |

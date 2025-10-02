@@ -55,6 +55,7 @@ describe('SpecWorkflowSetup', () => {
       'spec-steering-update.md',
       'spec-update.md',
       'spec-tasks-rebuild.md',
+      'spec-test.md',
       'bug-create.md',
       'bug-analyze.md',
       'bug-fix.md',

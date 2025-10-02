@@ -182,6 +182,7 @@ export class SpecWorkflowUpdater {
       'spec-steering-update',
       'spec-update',
       'spec-tasks-rebuild',
+      'spec-test',
       'bug-create',
       'bug-analyze',
       'bug-fix',

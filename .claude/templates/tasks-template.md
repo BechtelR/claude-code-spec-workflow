@@ -6,153 +6,178 @@
 ## Steering Document Compliance
 [How tasks follow structure.md conventions and tech.md patterns]
 
+## Task Execution Modes
+
+This specification supports two execution strategies:
+
+### Sequential Execution (Default)
+- Tasks executed one at a time via `/spec-execute {task-id}`
+- Allows larger scope per task (60-90 minutes)
+- Dependencies implicit through task ordering
+- Best for complex features requiring careful coordination
+
+### Parallel Execution (Advanced)
+- Multiple tasks executed simultaneously by different agents
+- Requires explicit dependencies and conflict-free file operations
+- Smaller scope per task (30-60 minutes to stay within context window)
+- Best for independent components that can be built concurrently
+
+**Choose your execution mode early - it affects task granularity and structure.**
+
 ## Atomic Task Requirements
-**Each task must meet these criteria for optimal agent execution:**
-- **File Scope**: Touches 1-3 related files maximum
-- **Time Boxing**: Completable in 15-30 minutes
-- **Single Purpose**: One testable outcome per task
+
+**For Sequential Mode:**
+- **Time Boxing**: Completable in 60-90 minutes by experienced developer
+- **File Scope**: Touches 2-4 related files (cohesive unit of work)
+- **Single Purpose**: One architectural component or feature layer
 - **Specific Files**: Must specify exact files to create/modify
 - **Agent-Friendly**: Clear input/output with minimal context switching
+
+**For Parallel Mode:**
+- **Time Boxing**: Completable in 30-60 minutes (context window constraint)
+- **File Scope**: Touches 2-3 files maximum (avoid conflicts)
+- **Single Purpose**: One independent component or module
+- **No File Conflicts**: Tasks in same batch must touch different files
+- **Explicit Dependencies**: Must declare all task dependencies
 
 ## Task Format Guidelines
 - Use checkbox format: `- [ ] Task number. Task description`
 - **Specify files**: Always include exact file paths to create/modify
 - **Include implementation details** as bullet points
-- Reference requirements using: `_Requirements: X.Y, Z.A_`
-- Reference existing code to leverage using: `_Leverage: path/to/file.ts, path/to/component.tsx_`
+- **REQUIRED metadata** (all tasks must include):
+  - `_Requirements: X.Y, Z.A_` - Requirements this task implements
+  - `_Depends: none_` or `_Depends: 1, 2.1_` - Task dependencies (use "none" if no dependencies)
+  - `_Parallel: yes_` or `_Parallel: no_` - Can this task run in parallel?
+  - `_Leverage: path/to/file.ts_` - Existing code to reuse (optional but recommended)
 - Focus only on coding tasks (no deployment, user testing, etc.)
 - **Avoid broad terms**: No "system", "integration", "complete" in task titles
 
 ## Good vs Bad Task Examples
-❌ **Bad Examples (Too Broad)**:
-- "Implement authentication system" (affects many files, multiple purposes)
-- "Add user management features" (vague scope, no file specification)
-- "Build complete dashboard" (too large, multiple components)
 
-✅ **Good Examples (Atomic)**:
-- "Create User model in models/user.py with email/password fields"
-- "Add password hashing utility in utils/auth.py using bcrypt"
-- "Create LoginForm component in components/LoginForm.tsx with email/password inputs"
+❌ **Bad Examples (Too Broad or Missing Metadata)**:
+- "Implement authentication system" (affects many files, multiple purposes, no file specification)
+- "Add user management features" (vague scope, no file specification, no metadata)
+- "Build complete dashboard" (too large, multiple components)
+- "Create User model" (missing _Depends:_, _Parallel:_, file path)
+
+✅ **Good Examples (Sequential Mode - 60-90 min scope)**:
+- "Create API framework and setup middleware in src/api/"
+  - Files: src/api/index.ts, src/api/middleware/auth.ts, src/api/middleware/error.ts
+  - _Requirements: 3.1, 3.2_
+  - _Depends: 1, 2_
+  - _Parallel: no_
+  - _Leverage: src/server.ts_
+
+- "Implement authentication service with JWT tokens and session management"
+  - Files: src/services/AuthService.ts, src/models/Session.ts, src/utils/jwt.ts
+  - _Requirements: 2.1, 2.2, 2.3_
+  - _Depends: 1_
+  - _Parallel: yes_
+  - _Leverage: src/services/BaseService.ts_
+
+✅ **Good Examples (Parallel Mode - 30-60 min scope)**:
+- "Create User model in src/models/User.ts with validation"
+  - File: src/models/User.ts
+  - _Requirements: 1.1_
+  - _Depends: none_
+  - _Parallel: yes_
+  - _Leverage: src/models/BaseModel.ts_
+
+- "Add password hashing utility in src/utils/auth.ts"
+  - File: src/utils/auth.ts
+  - _Requirements: 1.2_
+  - _Depends: none_
+  - _Parallel: yes_
+  - _Leverage: crypto library_
 
 ## Tasks
 
-- [ ] 1. Create core interfaces in src/types/feature.ts
-  - File: src/types/feature.ts
+### Example Tasks (Replace with your actual implementation tasks)
+
+- [ ] 1. Create core interfaces and type definitions in src/types/feature.ts
+  - Files: src/types/feature.ts
   - Define TypeScript interfaces for feature data structures
   - Extend existing base interfaces from base.ts
-  - Purpose: Establish type safety for feature implementation
-  - _Leverage: src/types/base.ts_
+  - Add type guards for runtime validation
+  - Purpose: Establish type safety foundation
   - _Requirements: 1.1_
+  - _Depends: none_
+  - _Parallel: yes_
+  - _Leverage: src/types/base.ts_
 
-- [ ] 2. Create base model class in src/models/FeatureModel.ts
-  - File: src/models/FeatureModel.ts
-  - Implement base model extending BaseModel class
-  - Add validation methods using existing validation utilities
-  - Purpose: Provide data layer foundation for feature
-  - _Leverage: src/models/BaseModel.ts, src/utils/validation.ts_
-  - _Requirements: 2.1_
-
-- [ ] 3. Add specific model methods to FeatureModel.ts
-  - File: src/models/FeatureModel.ts (continue from task 2)
-  - Implement create, update, delete methods
-  - Add relationship handling for foreign keys
-  - Purpose: Complete model functionality for CRUD operations
-  - _Leverage: src/models/BaseModel.ts_
-  - _Requirements: 2.2, 2.3_
-
-- [ ] 4. Create model unit tests in tests/models/FeatureModel.test.ts
-  - File: tests/models/FeatureModel.test.ts
-  - Write tests for model validation and CRUD methods
-  - Use existing test utilities and fixtures
-  - Purpose: Ensure model reliability and catch regressions
-  - _Leverage: tests/helpers/testUtils.ts, tests/fixtures/data.ts_
+- [ ] 2. Implement data model with validation in src/models/FeatureModel.ts
+  - Files: src/models/FeatureModel.ts
+  - Create model class extending BaseModel
+  - Implement create, read, update, delete methods
+  - Add validation using existing utilities
+  - Purpose: Complete data layer for feature
   - _Requirements: 2.1, 2.2_
+  - _Depends: 1_
+  - _Parallel: no_
+  - _Leverage: src/models/BaseModel.ts, src/utils/validation.ts_
 
-- [ ] 5. Create service interface in src/services/IFeatureService.ts
-  - File: src/services/IFeatureService.ts
-  - Define service contract with method signatures
-  - Extend base service interface patterns
-  - Purpose: Establish service layer contract for dependency injection
-  - _Leverage: src/services/IBaseService.ts_
-  - _Requirements: 3.1_
+- [ ] 3. Create service layer in src/services/FeatureService.ts
+  - Files: src/services/FeatureService.ts, src/services/IFeatureService.ts
+  - Define service interface and implementation
+  - Add business logic and error handling
+  - Register in dependency injection container
+  - Purpose: Provide business logic layer
+  - _Requirements: 3.1, 3.2_
+  - _Depends: 2_
+  - _Parallel: no_
+  - _Leverage: src/services/BaseService.ts, src/utils/errorHandler.ts_
 
-- [ ] 6. Implement feature service in src/services/FeatureService.ts
-  - File: src/services/FeatureService.ts
-  - Create concrete service implementation using FeatureModel
-  - Add error handling with existing error utilities
-  - Purpose: Provide business logic layer for feature operations
-  - _Leverage: src/services/BaseService.ts, src/utils/errorHandler.ts, src/models/FeatureModel.ts_
-  - _Requirements: 3.2_
+- [ ] 4. Set up API routing and middleware
+  - Files: src/api/routes/feature.ts, src/api/middleware/featureValidation.ts
+  - Configure Express routes for feature endpoints
+  - Add authentication and validation middleware
+  - Set up error handling
+  - Purpose: Establish API layer foundation
+  - _Requirements: 4.1, 4.2_
+  - _Depends: 3_
+  - _Parallel: no_
+  - _Leverage: src/api/baseApi.ts, src/middleware/auth.ts_
 
-- [ ] 7. Add service dependency injection in src/utils/di.ts
-  - File: src/utils/di.ts (modify existing)
-  - Register FeatureService in dependency injection container
-  - Configure service lifetime and dependencies
-  - Purpose: Enable service injection throughout application
-  - _Leverage: existing DI configuration in src/utils/di.ts_
-  - _Requirements: 3.1_
-
-- [ ] 8. Create service unit tests in tests/services/FeatureService.test.ts
-  - File: tests/services/FeatureService.test.ts
-  - Write tests for service methods with mocked dependencies
-  - Test error handling scenarios
-  - Purpose: Ensure service reliability and proper error handling
-  - _Leverage: tests/helpers/testUtils.ts, tests/mocks/modelMocks.ts_
-  - _Requirements: 3.2, 3.3_
-
-- [ ] 4. Create API endpoints
-  - Design API structure
-  - _Leverage: src/api/baseApi.ts, src/utils/apiUtils.ts_
-  - _Requirements: 4.0_
-
-- [ ] 4.1 Set up routing and middleware
-  - Configure application routes
-  - Add authentication middleware
-  - Set up error handling middleware
-  - _Leverage: src/middleware/auth.ts, src/middleware/errorHandler.ts_
-  - _Requirements: 4.1_
-
-- [ ] 4.2 Implement CRUD endpoints
-  - Create API endpoints
+- [ ] 5. Implement API endpoints in src/api/controllers/FeatureController.ts
+  - Files: src/api/controllers/FeatureController.ts
+  - Create CRUD endpoint handlers
   - Add request validation
-  - Write API integration tests
+  - Implement error responses
+  - Purpose: Complete API implementation
+  - _Requirements: 4.3, 4.4_
+  - _Depends: 4_
+  - _Parallel: no_
   - _Leverage: src/controllers/BaseController.ts, src/utils/validation.ts_
-  - _Requirements: 4.2, 4.3_
 
-- [ ] 5. Add frontend components
-  - Plan component architecture
-  - _Leverage: src/components/BaseComponent.tsx, src/styles/theme.ts_
-  - _Requirements: 5.0_
-
-- [ ] 5.1 Create base UI components
-  - Set up component structure
-  - Implement reusable components
-  - Add styling and theming
-  - _Leverage: src/components/BaseComponent.tsx, src/styles/theme.ts_
-  - _Requirements: 5.1_
-
-- [ ] 5.2 Implement feature-specific components
-  - Create feature components
-  - Add state management
+- [ ] 6. Create frontend UI components
+  - Files: src/components/FeatureList.tsx, src/components/FeatureForm.tsx
+  - Implement list and form components
+  - Add state management with hooks
   - Connect to API endpoints
-  - _Leverage: src/hooks/useApi.ts, src/components/BaseComponent.tsx_
-  - _Requirements: 5.2, 5.3_
+  - Purpose: Build user interface
+  - _Requirements: 5.1, 5.2_
+  - _Depends: 5_
+  - _Parallel: no_
+  - _Leverage: src/components/BaseComponent.tsx, src/hooks/useApi.ts_
 
-- [ ] 6. Integration and testing
-  - Plan integration approach
-  - _Leverage: src/utils/integrationUtils.ts, tests/helpers/testUtils.ts_
-  - _Requirements: 6.0_
+- [ ] 7. Write unit tests for model and service
+  - Files: tests/models/FeatureModel.test.ts, tests/services/FeatureService.test.ts
+  - Test model CRUD operations
+  - Test service business logic
+  - Mock dependencies
+  - Purpose: Ensure reliability
+  - _Requirements: 2.1, 2.2, 3.1_
+  - _Depends: 2, 3_
+  - _Parallel: yes_
+  - _Leverage: tests/helpers/testUtils.ts, tests/mocks/_
 
-- [ ] 6.1 Write end-to-end tests
-  - Set up E2E testing framework
-  - Write user journey tests
-  - Add test automation
-  - _Leverage: tests/helpers/testUtils.ts, tests/fixtures/data.ts_
-  - _Requirements: All_
-
-- [ ] 6.2 Final integration and cleanup
-  - Integrate all components
-  - Fix any integration issues
-  - Clean up code and documentation
-  - _Leverage: src/utils/cleanup.ts, docs/templates/_
-  - _Requirements: All_
+- [ ] 8. Write API integration tests
+  - Files: tests/api/feature.test.ts
+  - Test all API endpoints
+  - Test authentication and validation
+  - Test error scenarios
+  - Purpose: Verify API functionality
+  - _Requirements: 4.3, 4.4_
+  - _Depends: 5_
+  - _Parallel: yes_
+  - _Leverage: tests/helpers/apiTestUtils.ts_
