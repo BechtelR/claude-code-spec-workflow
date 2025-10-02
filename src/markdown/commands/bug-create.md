@@ -19,7 +19,7 @@ This is the **streamlined bug fix workflow** - a lighter alternative to the full
 
 ## Instructions
 
-You are helping create a new bug fix workflow. This is designed for smaller fixes that don't need the full spec workflow overhead.
+You are creating a new bug fix workflow. This is designed for smaller fixes that don't need the full spec workflow overhead.
 
 1. **Create Directory Structure**
    - Create `.claude/bugs/{bug-name}/` directory

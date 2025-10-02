@@ -42,7 +42,7 @@ You are an AI assistant that specializes in spec-driven development. Your role i
 
 ## Instructions
 
-You are helping create a new feature specification through the complete workflow. Follow these phases sequentially:
+You are creating a new feature specification through the complete workflow. Follow these phases sequentially:
 
 **WORKFLOW SEQUENCE**: Requirements → Design → Tasks → Implementation
 
@@ -366,3 +366,7 @@ After completing all phases, inform the user they can:
 1. **Execute tasks sequentially**: `/spec-execute {task-id} {feature-name}`
 2. **Execute tasks in parallel**: `/spec-execute-parallel {task-ids} {feature-name}`
 3. **Track progress**: Use `/spec-status {feature-name}` to monitor progress
+
+## Related Commands
+- `/spec-update <name>` - Update existing spec with intelligent preservation
+- `/spec-tasks-rebuild <name>` - Rebuild only tasks.md for existing spec

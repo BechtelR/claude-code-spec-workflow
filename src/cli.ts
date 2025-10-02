@@ -197,8 +197,10 @@ program
 
       console.log(chalk.yellow('Next steps:'));
       console.log(chalk.gray('1. Run: claude'));
-      console.log(chalk.gray('2. For new features: /spec-create feature-name "description"'));
-      console.log(chalk.gray('3. For bug fixes: /bug-create bug-name "description"'));
+      console.log(chalk.gray('2. Set up steering documents (recommended): /spec-steering-setup'));
+      console.log(chalk.gray('   This creates product.md, tech.md, structure.md, standards.md'));
+      console.log(chalk.gray('3. For new features: /spec-create feature-name "description"'));
+      console.log(chalk.gray('4. For bug fixes: /bug-create bug-name "description"'));
       console.log();
       console.log(chalk.blue('For help, see the README'));
       console.log(chalk.blue('To update later: npm install -g @pimzino/claude-code-spec-workflow'));

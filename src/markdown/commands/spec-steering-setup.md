@@ -8,7 +8,7 @@ Create or update steering documents that provide persistent project context.
 ```
 
 ## Instructions
-You are helping set up steering documents that will guide all future spec development. These documents provide persistent context about the product vision, technology stack, and project structure.
+You are setting up steering documents that will guide all future spec development. These documents provide persistent context about the product vision, technology stack, and project structure.
 
 ## Process
 
@@ -139,6 +139,6 @@ You are helping set up steering documents that will guide all future spec develo
 ## Next Steps
 After steering documents are created, they will automatically be referenced during:
 - `/spec-create` - Align requirements with product vision
-- `/spec-design` - Follow established tech patterns
-- `/spec-tasks` - Use correct file organization
+- `/spec-update` - Update existing specs with current steering context
+- `/spec-tasks-rebuild` - Rebuild tasks following current conventions
 - `/spec-execute` - Implement following all conventions

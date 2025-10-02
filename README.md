@@ -29,6 +29,13 @@ npm i -g @pimzino/claude-code-spec-workflow
 ```bash
 claude-code-spec-workflow
 ```
+3. Start Claude Code and set up steering documents (recommended)
+```bash
+claude
+
+# In Claude Code, run:
+/spec-steering-setup  # Creates product.md, tech.md, structure.md, standards.md
+```
 **Thats it, you are ready to go!**
 ---
 
@@ -83,7 +90,7 @@ claude-code-spec-workflow
 ### 🎯 **Steering Setup** (Project Context)
 
 ```bash
-/spec-steering-setup  # Creates product.md, tech.md, structure.md
+/spec-steering-setup  # Creates product.md, tech.md, structure.md, standards.md
 ```
 
 ---
@@ -96,7 +103,10 @@ claude-code-spec-workflow
 | Command | Purpose |
 |---------|---------|
 | `/spec-steering-setup` | Create project context documents |
+| `/spec-steering-update` | Update existing steering documents |
 | `/spec-create <name>` | Complete spec workflow |
+| `/spec-update <name>` | Update existing spec with intelligent preservation |
+| `/spec-tasks-rebuild <name>` | Rebuild tasks.md for existing spec |
 | `/spec-execute <task-id>` | Sequential task execution |
 | `/spec-execute-parallel <task-ids>` | Parallel task execution |
 | `/spec-status` | Show progress |
