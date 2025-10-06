@@ -1,271 +1,638 @@
 # Spec Steering Update Command
 
-Update existing steering documents with fresh codebase analysis while preserving valuable accurate content.
+Update steering documents with fresh codebase analysis while preserving accurate content.
 
 ## Usage
 ```
 /spec-steering-update
 ```
 
-## Instructions
-You are updating the project steering documents that guide all future spec development. This command performs a **thorough, comprehensive codebase review** (same as setup) but **intelligently merges** findings with existing documents to preserve valuable accurate content while updating outdated information and adding new insights.
+<role>
+You are updating project steering documents through comprehensive codebase analysis. Intelligently merge findings with existing documents to preserve valuable accurate content while updating outdated information and adding new insights.
+</role>
+
+<critical_rules>
+CRITICAL: These rules must be followed without exception:
+
+1. **NEVER modify documents without explicit user approval** - Always present comparison first
+2. **NEVER lose accurate existing content** - Preservation is the top priority
+3. **ALWAYS archive before changes** - Create `.archive/YYMMDD/` with DEPRECATED markers
+4. **NEVER skip comprehensive analysis** - Full codebase review required (same depth as setup)
+5. **NEVER include sensitive data** - No passwords, API keys, credentials, or PHI
+
+IMPORTANT: These significantly impact quality:
+
+1. **Present clear comparisons** - Show ✅ ACCURATE, 🔄 OUTDATED, ➕ NEW, 📝 ENHANCED
+2. **Update confidently** - Replace outdated info with current codebase state
+3. **Preserve valuable context** - Keep decisions, rationale, historical information
+4. **Keep standards.md concise** - Essential rules only, zero redundancy
+</critical_rules>
 
 ## Key Difference from Setup
 - **Setup**: Creates steering documents from scratch
 - **Update**: Performs full codebase analysis BUT preserves accurate existing content while updating/adding new findings
 
-## Process
+<process>
+## Step-by-Step Workflow
 
-1. **Load Existing Steering Documents**
-   - Load current steering context:
-     ```bash
-     claude-code-spec-workflow get-steering-context
-     ```
-   - Parse and store existing content from:
-     - product.md
-     - tech.md
-     - structure.md
-     - standards.md
-   - If any documents are missing, note which ones need to be created
-   - Display summary of what currently exists
+### Step 1: Load Existing Steering Documents
+**Command:**
+```bash
+claude-code-spec-workflow get-steering-context
+```
 
-2. **Search for Project Standards Documents**
-   - Look for common standards files in the project:
-     - `CONTRIBUTING.md`, `CONTRIBUTING.txt`
-     - `STANDARDS.md`, `CODING_STANDARDS.md`, `CODE_STANDARDS.md`
-     - `CONVENTIONS.md`, `CODING_CONVENTIONS.md`
-     - `STYLE_GUIDE.md`, `STYLE.md`
-     - `DEVELOPMENT.md`, `DEV_GUIDE.md`
-     - `.editorconfig`, `.prettierrc`, `.eslintrc*`
-     - Files in `docs/` or `documentation/` directories containing "standard", "convention", "rule", or "guideline"
-   - If found, extract key points:
-     - Coding style preferences
-     - UX preferences
-     - Architecture patterns and anti-patterns
-     - Testing requirements
-     - Code review rules
-   - Keep notes concise - will be used to update standards.md
+**Validate and parse:**
+```
+IF any steering documents missing:
+  → Note which documents need creation (product.md, tech.md, structure.md, standards.md)
+  → Mark for creation in Step 6
+ELSE:
+  → Parse all 4 documents completely
+  → Store existing content in memory
+  → Display summary of current state
+```
 
-3. **Analyze the Project Thoroughly**
-   - **CRITICAL**: Perform comprehensive codebase review (same depth as setup)
-   - Review the codebase to understand:
-     - Project type and purpose
-     - Technology stack in use
-     - Directory structure and patterns
-     - Coding conventions
-     - Existing features and functionality
-   - Look for:
-     - package.json, requirements.txt, go.mod, etc.
-     - README files
-     - Configuration files
-     - Source code structure
-     - Recent changes and new additions
+**Display format:**
+```
+Loaded existing steering documents:
+✅ product.md - [Brief summary of content]
+✅ tech.md - [Brief summary of content]
+✅ structure.md - [Brief summary of content]
+✅ standards.md - [Brief summary of content]
+```
 
-4. **Compare Findings Against Existing Documents**
-   - **CRITICAL STEP**: Compare fresh analysis with existing steering docs
-   - For each document, categorize findings:
+### Step 2: Search Project Standards Documents
+**CRITICAL: Identical to setup - comprehensive search required**
 
-     **✅ ACCURATE**: Existing content matches codebase findings
-     - Example: "React UI framework" in tech.md matches package.json
-     - Action: Preserve these sections unchanged
+**Search these locations:**
+1. Root directory files:
+   - `CONTRIBUTING.md`, `CONTRIBUTING.txt`
+   - `STANDARDS.md`, `CODING_STANDARDS.md`, `CODE_STANDARDS.md`
+   - `CONVENTIONS.md`, `CODING_CONVENTIONS.md`
+   - `STYLE_GUIDE.md`, `STYLE.md`
+   - `DEVELOPMENT.md`, `DEV_GUIDE.md`
 
-     **🔄 OUTDATED**: Existing content contradicts current codebase
-     - Example: tech.md says "React 17.0.2" but package.json shows "18.2.0"
-     - Action: Update with current information (show old → new)
+2. Configuration files:
+   - `.editorconfig`, `.prettierrc*`, `.eslintrc*`
 
-     **➕ NEW**: Found in codebase but not documented
-     - Example: TypeScript added to project but not in tech.md
-     - Action: Add new sections/items
+3. Documentation directories:
+   - Files in `docs/` or `documentation/` containing: "standard", "convention", "rule", "guideline"
 
-     **📝 ENHANCED**: Existing content accurate but can be expanded
-     - Example: "React: UI framework" → "React 18.2.0: UI framework with hooks and concurrent features"
-     - Action: Expand with additional context from analysis
+**Extract elements:**
+- Coding style (naming, formatting, structure)
+- UX preferences (patterns, components, accessibility)
+- Architecture (patterns to follow, anti-patterns to avoid)
+- Testing (requirements, coverage, frameworks)
+- Code review (approval process, quality gates)
 
-5. **Present Comparison and Inferred Details**
-   - Show comparison results in structured format:
-     ```
-     Based on my thorough codebase analysis, here's what I found:
+### Step 3: Analyze Codebase Thoroughly
+**CRITICAL: Comprehensive analysis required (same depth as setup)**
 
-     ## COMPARISON WITH EXISTING DOCS
+**Search for:**
+```
+Package managers: package.json, requirements.txt, go.mod, Cargo.toml, composer.json
+Documentation: README.md, README.txt, docs/**/*
+Config files: .config/*, *.config.js, .env.example
+Source structure: src/, app/, lib/, packages/
+Recent changes: git log, recent commits
+```
 
-     ### Product Document (product.md)
-     ✅ ACCURATE (will preserve):
-     - [List accurate sections]
+**Identify:**
+- Project type and purpose
+- Technology stack (frameworks, libraries, versions)
+- Directory patterns and organization
+- Coding conventions
+- Existing features and capabilities
+- Recent additions or changes since last update
 
-     🔄 NEEDS UPDATE:
-     - Features: Old doc lists 3 features, codebase shows 5 features
-     - [Other outdated items]
+### Step 4: Compare Findings Against Existing Documents
+**CRITICAL STEP: Categorize all findings**
 
-     ➕ NEW CONTENT TO ADD:
-     - Dashboard tunnel feature (found in src/tunnel/)
-     - [Other new items]
+**For each document, classify content:**
 
-     ### Technology Document (tech.md)
-     ✅ ACCURATE (will preserve):
-     - [List accurate sections]
+**✅ ACCURATE** - Existing content matches codebase
+```
+Example: tech.md says "PostgreSQL database" AND codebase uses PostgreSQL
+Action: Preserve unchanged
+```
 
-     🔄 NEEDS UPDATE:
-     - React: 17.0.2 → 18.2.0 (package.json)
-     - [Other outdated items]
+**🔄 OUTDATED** - Existing content contradicts codebase
+```
+Example: tech.md says "React 17" BUT package.json shows React 18
+Action: Update with current information (show old → new)
+```
 
-     ➕ NEW CONTENT TO ADD:
-     - TypeScript 5.3.3 (package.json)
-     - WebSocket integration (package.json, src/dashboard/)
-     - [Other new items]
+**➕ NEW** - Found in codebase but not documented
+```
+Example: TypeScript added to project but missing from tech.md
+Action: Add new sections/items
+```
 
-     ### Structure Document (structure.md)
-     [Same format...]
+**📝 ENHANCED** - Existing content accurate but can expand
+```
+Example: "React: UI framework" → "React 18: UI framework with concurrent features"
+Action: Expand with additional context from analysis
+```
 
-     ### Standards Document (standards.md)
-     [Same format...]
+### Step 5: Present Comparison and Findings
+**Format:**
+```
+Based on thorough codebase analysis:
 
-     ## FRESH ANALYSIS DETAILS
+## COMPARISON WITH EXISTING DOCS
 
-     **Product Details:**
-     - [Inferred detail 1]
-     - [Inferred detail 2]
+### product.md
+✅ ACCURATE (preserving):
+- Purpose: [existing purpose statement]
+- Key features: [list of accurate features]
 
-     **Technology Stack:**
-     - [Inferred tech 1]
-     - [Inferred tech 2]
+🔄 NEEDS UPDATE:
+- Features section missing 2 new capabilities
+  OLD: [old feature list]
+  NEW: [add: Dashboard feature, Tunnel feature]
 
-     **Project Structure:**
-     - [Inferred pattern 1]
-     - [Inferred pattern 2]
+➕ NEW CONTENT:
+- Success metrics not documented
+  Evidence: Found analytics in src/analytics/
 
-     **Engineering Standards:**
-     - [Key rule from CONTRIBUTING.md]
-     - [Pattern from STYLE_GUIDE.md]
-     - [Inferred pattern]
-     ```
-   - Ask: "Do these findings look correct? Should I preserve the ACCURATE sections and update the OUTDATED ones?"
-   - Ask: "Are there any other coding rules, engineering standards, or conventions I should know about?"
+### tech.md
+✅ ACCURATE (preserving):
+- Node.js runtime
+- PostgreSQL database
 
-6. **Gather Missing Information**
-   - Based on user feedback, identify gaps
-   - Ask targeted questions to fill in missing details:
+🔄 NEEDS UPDATE:
+- React: 17 → 18 (package.json)
+- Missing TypeScript (now in use)
 
-     **Product Questions:**
-     - What is the main problem this product solves?
-     - What are the product's unique strategic advantages (USAs)?
-     - Who are the primary users?
-     - What are the key business objectives?
-     - What metrics define success?
+➕ NEW CONTENT:
+- WebSocket integration (found in src/websocket/)
+- Redis caching (found in package.json, src/cache/)
 
-     **Technology Questions:**
-     - Are there any technical constraints or requirements?
-     - What third-party services are integrated?
-     - What are the performance requirements?
+### structure.md
+✅ ACCURATE (preserving):
+- Feature-based architecture
+- Component patterns
 
-     **Structure Questions:**
-     - How should new features be organized?
-     - What are the testing requirements?
+🔄 NEEDS UPDATE:
+- Directory structure expanded with new /tunnel directory
 
-     **Engineering Standards Questions:**
-     - Any mandatory code patterns or anti-patterns (beyond what was found)?
-     - Specific code review requirements?
-     - Security, privacy or compliance standards?
+➕ NEW CONTENT:
+- Testing conventions (found in *.test.ts files)
 
-7. **Archive Existing Steering Documents**
-   - **CRITICAL**: Before making ANY changes, archive current steering documents
-   - Create archive directory structure:
-     ```bash
-     # Use current date in YYMMDD format (e.g., 251002 for Oct 2, 2025)
-     .claude/steering/.archive/251002/
-     ```
-   - Copy all existing steering documents to archive:
-     - `.claude/steering/product.md` → `.claude/steering/.archive/251002/product.md`
-     - `.claude/steering/tech.md` → `.claude/steering/.archive/251002/tech.md`
-     - `.claude/steering/structure.md` → `.claude/steering/.archive/251002/structure.md`
-     - `.claude/steering/standards.md` → `.claude/steering/.archive/251002/standards.md`
-   - **Mark archived documents as deprecated**:
-     - Add `(DEPRECATED)` to the very top of each archived document (first line, before heading)
-     - Example:
-       ```markdown
-       (DEPRECATED)
-       # Product Context
-       ```
-   - Confirm to user: "Existing steering documents backed up to `.claude/steering/.archive/251002/` and marked as DEPRECATED"
-   - **Note**: If user specifies a version (e.g., "v2.1"), use that instead: `.claude/steering/.archive/v2.1/`
+### standards.md
+✅ ACCURATE (preserving):
+- Code review: 2 approvals required
+- Test coverage: 80% minimum
 
-8. **Generate Merged Steering Documents**
-   - Create `.claude/steering/` directory if it doesn't exist
-   - Generate **four** merged documents with version header
-   - **Add version header** to each new document:
-     - Format: `*Version: MAJOR.YYMM.BUILD.PATCH*`
-     - Place directly under the main heading (second line)
-     - Example:
-       ```markdown
-       # Product Context
-       *Version: 1.2510.1.0*
+➕ NEW CONTENT:
+- TypeScript strict mode requirement (found in tsconfig.json)
+- No `any` types (found in .eslintrc.json)
+```
 
-       [Document content...]
-       ```
-     - Ask user for version if they want to specify, otherwise use: `1.YYMM.1.0` (e.g., `1.2510.1.0` for October 2025)
+**Then ask:**
+1. "Do these findings look correct?"
+2. "Should I preserve ACCURATE sections and update OUTDATED ones?"
+3. "Are there coding rules, standards, or conventions I missed?"
 
-     **For each document (product.md, tech.md, structure.md, standards.md):**
+**CRITICAL: Wait for user response before proceeding**
 
-     a. **Preserve Accurate Sections**
-        - Keep sections marked as ✅ ACCURATE unchanged
-        - Maintain original wording and structure
-        - Preserve valuable context and historical decisions
+### Step 6: Archive Existing Documents
+**CRITICAL: Archive BEFORE making any changes**
 
-     b. **Update Outdated Sections**
-        - Replace sections marked as 🔄 OUTDATED with current information
-        - Show what changed (e.g., "React 18.2.0 (updated from 17.0.2)")
-        - Maintain section structure where possible
+**Create archive structure:**
+```bash
+# Use current date in YYMMDD format (e.g., 251006 for Oct 6, 2025)
+.claude/steering/.archive/251006/
+```
 
-     c. **Add New Sections**
-        - Insert sections marked as ➕ NEW in appropriate locations
-        - Follow existing document structure and formatting
-        - Integrate smoothly with preserved content
+**Copy all documents:**
+```bash
+.claude/steering/product.md → .archive/251006/product.md
+.claude/steering/tech.md → .archive/251006/tech.md
+.claude/steering/structure.md → .archive/251006/structure.md
+.claude/steering/standards.md → .archive/251006/standards.md
+```
 
-     d. **Enhance Accurate Sections** (when beneficial)
-        - Expand sections marked as 📝 ENHANCED with new insights
-        - Add clarifying details from fresh analysis
-        - Keep enhancements relevant and concise
+**Mark as deprecated:**
+Add `(DEPRECATED)` as first line of each archived document:
+```markdown
+(DEPRECATED)
+# Product Context
 
-9. **Review and Confirm**
-   - Ensure standards.md is **focused and concise** (essential rules only, zero redundancy with tech.md/structure.md)
-   - Present the merged documents to the user
-   - **Highlight what changed**: Show preserved vs. updated vs. new sections
-   - Ask for final approval before saving
-   - Make any requested adjustments
+[Old content...]
+```
 
-## Important Notes
+**Confirm to user:**
+```
+✅ Existing documents archived to `.claude/steering/.archive/251006/`
+✅ All archived documents marked as DEPRECATED
+```
 
-- **Thorough analysis required** - perform complete codebase review like setup command
-- **Preservation is critical** - never lose valuable accurate content from existing docs
-- **Intelligent merging** - combine best of existing docs with fresh findings
-- **Update confidently** - replace outdated info with current codebase state
-- **Add comprehensively** - include all new discoveries from analysis
-- **Steering documents are persistent** - they will be referenced in all future spec commands
-- **Keep documents focused** - each should cover its specific domain
-- **Never include sensitive data** - no passwords, API keys, or credentials
+**Note:** If user specifies version (e.g., "v2.1"), use: `.archive/v2.1/`
 
-## Example Flow
+### Step 7: Generate Merged Documents
+**Add version header to each updated document:**
+```markdown
+# Product Context
+*Version: 1.2510.1.0*
 
-1. Load existing steering documents (get-steering-context)
-2. Search for and find CONTRIBUTING.md with coding standards
-3. Perform thorough codebase analysis (same as setup)
-4. Compare findings with existing docs:
-   - product.md: 3 sections accurate, 1 outdated (features), 2 new items
-   - tech.md: Most accurate, React version outdated, TypeScript not documented
-   - structure.md: Mostly accurate, dashboard architecture expanded
-   - standards.md: All accurate, found new anti-pattern to add
-5. Present comparison showing what will be preserved/updated/added
-6. User confirms findings and provides additional context
-7. Ask about any gaps (performance requirements, new integrations)
-8. Archive existing steering documents to `.claude/steering/.archive/251002/`
-9. Generate merged documents:
-   - Preserve all accurate sections verbatim
-   - Update React version in tech.md
-   - Add TypeScript and WebSocket to tech.md
-   - Add 2 new features to product.md
-   - Expand dashboard section in structure.md
-   - Add new anti-pattern to standards.md
-10. User reviews merged documents and approves
-11. Save updated documents to `.claude/steering/` directory
+[Document content...]
+```
+
+**Version format:** `MAJOR.YYMM.BUILD.PATCH`
+- Ask user for version or use default: `1.YYMM.1.0`
+
+**For each document (product.md, tech.md, structure.md, standards.md):**
+
+**a. Preserve Accurate Sections**
+```
+Keep sections marked ✅ ACCURATE unchanged
+→ Maintain original wording
+→ Preserve context and decisions
+→ Keep structure intact
+```
+
+**b. Update Outdated Sections**
+```
+Replace sections marked 🔄 OUTDATED with current information
+→ Show what changed in version history if valuable
+→ Maintain section structure where possible
+→ Update confidently based on codebase evidence
+```
+
+**c. Add New Sections**
+```
+Insert sections marked ➕ NEW in appropriate locations
+→ Follow existing document structure
+→ Integrate smoothly with preserved content
+→ Maintain consistent formatting
+```
+
+**d. Enhance Accurate Sections** (when beneficial)
+```
+Expand sections marked 📝 ENHANCED with insights
+→ Add clarifying details from analysis
+→ Keep enhancements relevant and concise
+→ Don't over-explain
+```
+
+**Quality validation:**
+```
+standards.md specific:
+[ ] ONLY essential engineering rules
+[ ] ZERO tech stack details (belongs in tech.md)
+[ ] ZERO structure details (belongs in structure.md)
+[ ] Concise and actionable
+
+All documents:
+[ ] No sensitive data
+[ ] Version headers added
+[ ] Clear structure
+[ ] Aligned with codebase
+```
+
+### Step 8: Review and Confirm
+**Present merged documents:**
+```
+Generated merged documents:
+
+## product.md Changes
+✅ Preserved: [sections kept unchanged]
+🔄 Updated: [what changed]
+➕ Added: [new sections]
+
+## tech.md Changes
+✅ Preserved: [sections kept unchanged]
+🔄 Updated: [what changed]
+➕ Added: [new sections]
+
+## structure.md Changes
+✅ Preserved: [sections kept unchanged]
+🔄 Updated: [what changed]
+➕ Added: [new sections]
+
+## standards.md Changes
+✅ Preserved: [sections kept unchanged]
+➕ Added: [new sections]
+
+Review merged documents. Approve to save or request changes.
+```
+
+**CRITICAL: Do NOT save until user explicitly approves**
+
+**When approved:**
+- Save all documents to `.claude/steering/`
+- Confirm: "Steering documents updated successfully!"
+
+</process>
+
+<examples>
+### Example 1: Standard Update Flow
+
+**Scenario:** Project added TypeScript, updated React, added WebSocket feature
+
+**User:** `/spec-steering-update`
+
+**Correct Response:**
+```
+Loading existing steering documents...
+✅ product.md - Task management platform
+✅ tech.md - React stack documented
+✅ structure.md - Feature-based architecture
+✅ standards.md - Code quality rules
+
+Searching for project standards...
+Found: CONTRIBUTING.md, tsconfig.json, .eslintrc.json
+
+Analyzing codebase thoroughly...
+[Reads package.json, src structure, git log]
+
+Based on thorough codebase analysis:
+
+## COMPARISON WITH EXISTING DOCS
+
+### product.md
+✅ ACCURATE (preserving):
+- Purpose: Task management for teams
+- Core features: Auth, CRUD, collaboration
+
+➕ NEW CONTENT:
+- Real-time updates feature (found in src/websocket/)
+- Evidence: WebSocket server, real-time components
+
+### tech.md
+✅ ACCURATE (preserving):
+- Next.js 14
+- PostgreSQL database
+
+🔄 NEEDS UPDATE:
+- React: 17 → 18 (package.json)
+- JavaScript → TypeScript (package.json, tsconfig.json)
+
+➕ NEW CONTENT:
+- WebSocket (Socket.io) - real-time features
+- Redis caching layer
+
+### structure.md
+✅ ACCURATE (preserving):
+- Feature-based: src/features/[feature]/
+- PascalCase components
+
+➕ NEW CONTENT:
+- src/websocket/ - WebSocket server
+- .test.ts - Testing convention
+
+### standards.md
+✅ ACCURATE (preserving):
+- 2 PR approvals required
+- 80% test coverage
+
+➕ NEW CONTENT:
+- TypeScript strict mode (tsconfig.json)
+- No `any` types (.eslintrc.json)
+
+Do these findings look correct?
+Should I preserve ACCURATE sections and update OUTDATED ones?
+```
+
+**Reasoning:**
+- Clear categorization (✅ 🔄 ➕)
+- Shows evidence for changes
+- Preserves valuable existing content
+- Asks for confirmation
+
+---
+
+**Incorrect Response:**
+```
+Let me update your steering documents.
+
+[Analyzes codebase]
+[Regenerates all 4 documents from scratch]
+[Loses existing content]
+
+Steering documents updated!
+```
+
+**Why Wrong:**
+- Doesn't preserve existing content
+- No comparison shown
+- No user approval
+- Loses valuable context
+
+### Example 2: Preserving Accurate Content
+
+**Scenario:** User has detailed product vision that's still accurate
+
+**User:** `/spec-steering-update`
+
+**After comparison step, product.md shows:**
+
+**Correct Approach:**
+```
+### product.md
+✅ ACCURATE (preserving):
+- Purpose: "Enable distributed teams to coordinate asynchronously..."
+  [Full existing purpose statement - 3 paragraphs]
+- Strategic advantages:
+  1. [Existing USA 1]
+  2. [Existing USA 2]
+  3. [Existing USA 3]
+- Target users: [Existing user profiles]
+
+🔄 NEEDS UPDATE:
+- Features: Missing 2 new capabilities
+
+➕ NEW CONTENT:
+- Success metrics from analytics implementation
+
+Action: Preserve entire purpose, USAs, and users sections verbatim.
+Update only features. Add metrics section.
+```
+
+**Reasoning:**
+- Valuable strategic content preserved exactly
+- Only updates what changed
+- Doesn't regenerate accurate sections
+
+---
+
+**Incorrect Approach:**
+```
+### product.md
+Regenerating based on codebase...
+
+Purpose: Task management for teams
+Features: [New list]
+Users: Teams
+```
+
+**Why Wrong:**
+- Lost detailed purpose statement
+- Lost strategic advantages
+- Lost user profiles
+- Regenerated when preservation needed
+
+### Example 3: Archiving Before Changes
+
+**Scenario:** User approves updates
+
+**User:** "Yes, those updates look correct. Please proceed."
+
+**Correct Response:**
+```
+Great! Archiving existing documents before making changes...
+
+Creating archive: .claude/steering/.archive/251006/
+✅ Archived product.md
+✅ Archived tech.md
+✅ Archived structure.md
+✅ Archived standards.md
+✅ All archived documents marked as DEPRECATED
+
+Generating merged documents...
+[Shows merged content]
+
+What version should I use? (default: 1.2510.1.0)
+```
+
+**Reasoning:**
+- Archives BEFORE any changes
+- Confirms archiving completed
+- Marks deprecated
+- Asks about version
+
+---
+
+**Incorrect Response:**
+```
+Great! Updating documents...
+[Modifies files directly]
+[No archive created]
+
+Documents updated!
+```
+
+**Why Wrong:**
+- No archive created
+- Lost previous versions
+- Can't rollback if needed
+
+</examples>
+
+<what_not_to_do>
+## Critical Mistakes to Avoid
+
+❌ **NEVER skip archiving**
+```
+Wrong: [Updates files directly without archiving]
+Right: Archive → Mark DEPRECATED → Then update
+```
+
+❌ **NEVER regenerate accurate content**
+```
+Wrong: tech.md shows accurate PostgreSQL → Regenerates entire tech stack section
+Right: tech.md shows accurate PostgreSQL → Preserve that line unchanged
+```
+
+❌ **NEVER lose valuable context**
+```
+Wrong: Removes detailed strategic advantages from product.md
+Right: Preserves all strategic content, only updates features list
+```
+
+❌ **NEVER skip comprehensive analysis**
+```
+Wrong: "What's changed since last update?" [Asks user instead of analyzing]
+Right: [Full codebase analysis] "Here's what I found changed..."
+```
+
+❌ **NEVER save without approval**
+```
+Wrong: [Presents comparison] [Immediately saves]
+Right: [Presents comparison] "Approve to save or request changes"
+```
+
+❌ **NEVER make standards.md redundant**
+```
+Wrong standards.md: "React, Feature-based architecture, TypeScript"
+Right standards.md: "No `any` types, TypeScript strict mode, 80% test coverage"
+Rationale: Tech/structure details belong elsewhere, standards.md is for rules
+```
+
+</what_not_to_do>
+
+<error_prevention>
+## Common Failures and Solutions
+
+### Failure 1: Losing Existing Content
+**Problem:** Regenerating sections instead of preserving accurate ones
+**Why It Fails:** Loses valuable strategic decisions, context, rationale
+**Solution:**
+- Compare FIRST
+- Mark ✅ ACCURATE sections
+- Preserve those sections verbatim
+- Only update 🔄 OUTDATED and add ➕ NEW
+
+### Failure 2: No Archive Before Changes
+**Problem:** Modifying files without backup
+**Why It Fails:** Can't rollback, lost history, risky
+**Solution:**
+- ALWAYS archive first (`.archive/YYMMDD/`)
+- Mark archived files as DEPRECATED
+- Confirm archive completed
+- THEN make changes
+
+### Failure 3: Incomplete Comparison
+**Problem:** Not categorizing findings (✅ 🔄 ➕ 📝)
+**Why It Fails:** User can't understand what's preserved vs changed
+**Solution:**
+- For EACH document
+- Categorize EVERY section
+- Show clear comparison
+- Get user confirmation
+
+### Failure 4: Shallow Analysis
+**Problem:** Quick scan instead of comprehensive codebase review
+**Why It Fails:** Misses important changes, incomplete updates
+**Solution:**
+- Same depth as setup command
+- Check package files, configs, source code
+- Review recent git history
+- Search for new features/patterns
+
+</error_prevention>
+
+<meta_instructions>
+## About This Command
+
+**Priority Resolution:**
+When instructions seem to conflict:
+1. CRITICAL rules always win (never lose content, always archive, get approval)
+2. Preservation beats regeneration (keep accurate content)
+3. Process steps override general guidance
+4. Examples demonstrate exact desired behavior
+
+**Categorization Rules:**
+- ✅ ACCURATE: Content matches codebase evidence → Preserve unchanged
+- 🔄 OUTDATED: Content contradicts codebase evidence → Update with current
+- ➕ NEW: Found in codebase but missing from docs → Add
+- 📝 ENHANCED: Accurate but can add valuable context → Expand selectively
+
+**Document Separation Rules:**
+- product.md: WHAT (vision, features, users, objectives)
+- tech.md: WITH WHAT (tools, frameworks, versions, integrations)
+- structure.md: WHERE/HOW (organization, naming, patterns)
+- standards.md: RULES (quality requirements, review process, anti-patterns)
+
+**Completion Criteria:**
+Command is complete when:
+1. Comparison presented and approved
+2. Existing documents archived with DEPRECATED markers
+3. Merged documents approved by user
+4. All 4 files saved to `.claude/steering/`
+5. User informed of successful update
+</meta_instructions>
 
 ## Next Steps
 After steering documents are updated, they will automatically be referenced during:

@@ -28,8 +28,8 @@ For spec features: `claude-code-spec-workflow get-spec-context {feature-name}`
 3. **Fix** targeted solution
 4. **Verify** by re-running failed test
 5. **Iterate** until 100% success
-6. **Document** persistent issues in `./.claude/.test-reports/{yymmdd}_{feature}_validation.md`
-     For spec features: `./.claude/specs/{feature-name}/.test-reports/{yymmdd}_validation.md`
+6. **Document** persistent issues in `.claude/.test-reports/{yymmdd}_{feature-name}_validation.md`
+     For spec features: `.claude/specs/{feature-name}/.test-reports/{yymmdd}_validation.md`
 
 ## Workflow
 1. **Scope Assessment**: Check tasks.md, package.json scripts, identify test types needed
